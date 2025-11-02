@@ -4,12 +4,7 @@
     <title>Activation Required</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background: #0a0a0a;
             font-family: Arial, sans-serif;
@@ -20,7 +15,6 @@
             justify-content: center;
             padding: 20px;
         }
-        
         .container {
             width: 100%;
             max-width: 400px;
@@ -31,34 +25,11 @@
             box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
             text-align: center;
         }
-        
-        .logo {
-            margin-bottom: 25px;
-        }
-        
-        .logo h1 {
-            color: #ff0000;
-            font-size: 24px;
-            margin-bottom: 8px;
-        }
-        
-        .logo p {
-            color: #cccccc;
-            font-size: 14px;
-        }
-        
-        .input-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        
-        .input-group label {
-            display: block;
-            color: #ff0000;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-        
+        .logo { margin-bottom: 25px; }
+        .logo h1 { color: #ff0000; font-size: 24px; margin-bottom: 8px; }
+        .logo p { color: #cccccc; font-size: 14px; }
+        .input-group { margin-bottom: 20px; text-align: left; }
+        .input-group label { display: block; color: #ff0000; margin-bottom: 8px; font-size: 14px; }
         .license-input {
             width: 100%;
             padding: 15px;
@@ -68,12 +39,7 @@
             color: #ffffff;
             font-size: 16px;
         }
-        
-        .license-input:focus {
-            outline: none;
-            border-color: #ff0000;
-        }
-        
+        .license-input:focus { outline: none; border-color: #ff0000; }
         .activate-btn {
             width: 100%;
             padding: 15px;
@@ -86,11 +52,7 @@
             cursor: pointer;
             margin-top: 10px;
         }
-        
-        .activate-btn:hover {
-            background: #cc0000;
-        }
-        
+        .activate-btn:hover { background: #cc0000; }
         .status-message {
             margin-top: 15px;
             padding: 12px;
@@ -98,19 +60,8 @@
             font-size: 14px;
             display: none;
         }
-        
-        .status-success {
-            background: rgba(0, 255, 0, 0.1);
-            border: 1px solid #00ff00;
-            color: #00ff00;
-        }
-        
-        .status-error {
-            background: rgba(255, 0, 0, 0.1);
-            border: 1px solid #ff0000;
-            color: #ff0000;
-        }
-        
+        .status-success { background: rgba(0, 255, 0, 0.1); border: 1px solid #00ff00; color: #00ff00; }
+        .status-error { background: rgba(255, 0, 0, 0.1); border: 1px solid #ff0000; color: #ff0000; }
         .device-info {
             margin-top: 20px;
             padding-top: 15px;
@@ -126,26 +77,13 @@
             <h1>Activation Required</h1>
             <p>Enter your license key to continue</p>
         </div>
-        
         <div class="input-group">
             <label>License Key</label>
-            <input 
-                type="text" 
-                class="license-input" 
-                id="licenseKey" 
-                placeholder="Enter license key"
-            >
+            <input type="text" class="license-input" id="licenseKey" placeholder="Enter license key">
         </div>
-        
-        <button class="activate-btn" onclick="activateApp()">
-            Activate App
-        </button>
-        
+        <button class="activate-btn" onclick="activateApp()">Activate App</button>
         <div id="statusMessage" class="status-message"></div>
-        
-        <div class="device-info">
-            Device: <span id="deviceId">Loading...</span>
-        </div>
+        <div class="device-info">Device: <span id="deviceId">Loading...</span></div>
     </div>
 
     <script>
@@ -153,31 +91,18 @@
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get('device_id') || 'Unknown Device';
         }
-        
         document.getElementById('deviceId').textContent = getDeviceId();
-        
         document.getElementById('licenseKey').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                activateApp();
-            }
+            if (e.key === 'Enter') activateApp();
         });
-        
         async function activateApp() {
             const licenseKey = document.getElementById('licenseKey').value.trim();
             const statusDiv = document.getElementById('statusMessage');
-            
             statusDiv.style.display = 'none';
-            
-            if (!licenseKey) {
-                showStatus('Please enter a license key', 'error');
-                return;
-            }
-            
+            if (!licenseKey) { showStatus('Please enter a license key', 'error'); return; }
             showStatus('Checking license...', 'error');
-            
             try {
                 const isValid = await checkLicense(licenseKey);
-                
                 if (isValid) {
                     showStatus('Activation successful!', 'success');
                     setTimeout(() => {
@@ -190,11 +115,9 @@
                 showStatus('Network error. Please try again.', 'error');
             }
         }
-        
         async function checkLicense(licenseKey) {
             return new Promise((resolve) => {
                 setTimeout(() => {
-                    // This will check against your dashboard licenses
                     const savedLicenses = JSON.parse(localStorage.getItem('licenses')) || [];
                     const validLicense = savedLicenses.find(license => 
                         license.key === licenseKey && 
@@ -205,7 +128,6 @@
                 }, 1000);
             });
         }
-        
         function showStatus(message, type) {
             const statusDiv = document.getElementById('statusMessage');
             statusDiv.textContent = message;
