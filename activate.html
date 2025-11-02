@@ -38,6 +38,8 @@
             border-radius: 5px;
             color: #ffffff;
             font-size: 16px;
+            text-align: center;
+            text-transform: uppercase;
         }
         .license-input:focus { outline: none; border-color: #ff0000; }
         .activate-btn {
@@ -62,7 +64,7 @@
         }
         .status-success { background: rgba(0, 255, 0, 0.1); border: 1px solid #00ff00; color: #00ff00; }
         .status-error { background: rgba(255, 0, 0, 0.1); border: 1px solid #ff0000; color: #ff0000; }
-        .device-info {
+        .contact-info {
             margin-top: 20px;
             padding-top: 15px;
             border-top: 1px solid #333333;
@@ -74,60 +76,109 @@
 <body>
     <div class="container">
         <div class="logo">
-            <h1>Activation Required</h1>
-            <p>Enter your license key to continue</p>
+            <h1>🔐 ACTIVATION REQUIRED</h1>
+            <p>Contact admin for license key</p>
         </div>
+        
         <div class="input-group">
-            <label>License Key</label>
-            <input type="text" class="license-input" id="licenseKey" placeholder="Enter license key">
+            <label>ENTER LICENSE KEY</label>
+            <input type="text" class="license-input" id="licenseKey" placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="19">
         </div>
-        <button class="activate-btn" onclick="activateApp()">Activate App</button>
+        
+        <button class="activate-btn" onclick="activateApp()">ACTIVATE</button>
+        
         <div id="statusMessage" class="status-message"></div>
-        <div class="device-info">Device: <span id="deviceId">Loading...</span></div>
+        
+        <div class="contact-info">
+            <p>ⓘ Contact THE-F!X_King for activation</p>
+            <p>Device: <span id="deviceId">Loading...</span></p>
+        </div>
     </div>
 
     <script>
-        function getDeviceId() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('device_id') || 'Unknown Device';
-        }
-        document.getElementById('deviceId').textContent = getDeviceId();
+        // License key formatting
+        document.getElementById('licenseKey').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+            if(value.length > 16) value = value.substring(0, 16);
+            
+            let formatted = '';
+            for(let i = 0; i < value.length; i++) {
+                if(i > 0 && i % 4 === 0) formatted += '-';
+                formatted += value[i];
+            }
+            e.target.value = formatted;
+        });
+
+        // Enter key support
         document.getElementById('licenseKey').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') activateApp();
         });
+
+        // Device ID
+        function getDeviceId() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('device_id') || Math.random().toString(36).substr(2, 8).toUpperCase();
+        }
+        document.getElementById('deviceId').textContent = getDeviceId();
+
+        // Activation function
         async function activateApp() {
-            const licenseKey = document.getElementById('licenseKey').value.trim();
+            const licenseKey = document.getElementById('licenseKey').value.replace(/-/g, '');
             const statusDiv = document.getElementById('statusMessage');
+            
             statusDiv.style.display = 'none';
-            if (!licenseKey) { showStatus('Please enter a license key', 'error'); return; }
-            showStatus('Checking license...', 'error');
+            
+            if (!licenseKey || licenseKey.length !== 16) {
+                showStatus('❌ Invalid license format', 'error');
+                return;
+            }
+
+            showStatus('🔍 Checking license...', 'error');
+            
             try {
-                const isValid = await checkLicense(licenseKey);
-                if (isValid) {
-                    showStatus('Activation successful!', 'success');
+                const response = await validateLicense(licenseKey);
+                
+                if (response.valid) {
+                    showStatus('✅ Activation successful!', 'success');
+                    // Close WebView and continue to app
                     setTimeout(() => {
-                        window.location.href = `license://success?key=${encodeURIComponent(licenseKey)}`;
-                    }, 1000);
+                        if (window.Android) {
+                            window.Android.activationSuccess(licenseKey);
+                        } else {
+                            // For WebView
+                            window.location.href = 'app://activation_success?key=' + licenseKey;
+                        }
+                    }, 2000);
                 } else {
-                    showStatus('Invalid license key', 'error');
+                    showStatus('❌ ' + response.message, 'error');
                 }
             } catch (error) {
-                showStatus('Network error. Please try again.', 'error');
+                showStatus('❌ Server error - try again', 'error');
             }
         }
-        async function checkLicense(licenseKey) {
+
+        // License validation
+        async function validateLicense(licenseKey) {
+            // This would call your server API
+            // For demo, using simple validation
             return new Promise((resolve) => {
                 setTimeout(() => {
-                    const savedLicenses = JSON.parse(localStorage.getItem('licenses')) || [];
-                    const validLicense = savedLicenses.find(license => 
-                        license.key === licenseKey && 
-                        license.status === 'active' &&
-                        new Date(license.expiryDate) >= new Date()
-                    );
-                    resolve(!!validLicense);
-                }, 1000);
+                    // Demo validation - replace with your API call
+                    const demoKeys = {
+                        'USER1ABCD1234EFGH': { valid: true, message: 'License activated' },
+                        'PREMIUMKEY9999999': { valid: true, message: 'Premium activated' },
+                        'TESTKEY0000000000': { valid: true, message: 'Test activated' }
+                    };
+                    
+                    if (demoKeys[licenseKey]) {
+                        resolve({ valid: true, message: demoKeys[licenseKey].message });
+                    } else {
+                        resolve({ valid: false, message: 'Invalid license key' });
+                    }
+                }, 1500);
             });
         }
+
         function showStatus(message, type) {
             const statusDiv = document.getElementById('statusMessage');
             statusDiv.textContent = message;
