@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>License Manager</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #0a0a0a;
+            font-family: Arial, sans-serif;
+            color: #ffffff;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #111111;
+            border-radius: 10px;
+            border: 1px solid #ff0000;
+        }
+        
+        .header h1 {
+            color: #ff0000;
+            margin-bottom: 10px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: #111111;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #333333;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            color: #ff0000;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #cccccc;
+            font-size: 12px;
+        }
+        
+        .panel {
+            background: #111111;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid #333333;
+        }
+        
+        .panel h2 {
+            color: #ff0000;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            color: #cccccc;
+            margin-bottom: 5px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            background: #1a1a1a;
+            border: 1px solid #333333;
+            border-radius: 5px;
+            color: #ffffff;
+        }
+        
+        .btn {
+            background: #ff0000;
+            color: #ffffff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .btn-block {
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .license-list {
+            margin-top: 20px;
+        }
+        
+        .license-item {
+            background: #1a1a1a;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border-left: 3px solid #ff0000;
+        }
+        
+        .license-key {
+            color: #ff0000;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .license-info {
+            color: #cccccc;
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+        
+        .license-actions {
+            margin-top: 10px;
+        }
+        
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+            margin-right: 5px;
+            background: #333333;
+        }
+        
+        .status-active { color: #00ff00; }
+        .status-expired { color: #ff0000; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>License Management</h1>
+        <p>Create and manage license keys</p>
+    </div>
+    
+    <div class="stats">
+        <div class="stat-card">
+            <div class="stat-number" id="totalLicenses">0</div>
+            <div class="stat-label">Total Licenses</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="activeLicenses">0</div>
+            <div class="stat-label">Active Licenses</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="totalDevices">0</div>
+            <div class="stat-label">Active Devices</div>
+        </div>
+    </div>
+    
+    <div class="panel">
+        <h2>Generate License</h2>
+        <div class="form-group">
+            <label>Customer Name</label>
+            <input type="text" class="form-control" id="customerName" placeholder="Enter customer name">
+        </div>
+        
+        <div class="form-group">
+            <label>Device Limit</label>
+            <select class="form-control" id="deviceLimit">
+                <option value="1">1 Device</option>
+                <option value="2">2 Devices</option>
+                <option value="3">3 Devices</option>
+                <option value="5">5 Devices</option>
+                <option value="10">10 Devices</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>Expiry Days</label>
+            <select class="form-control" id="expiryDays">
+                <option value="7">7 Days</option>
+                <option value="30">30 Days</option>
+                <option value="90">90 Days</option>
+                <option value="365">1 Year</option>
+            </select>
+        </div>
+        
+        <button class="btn btn-block" onclick="generateLicense()">
+            Generate License Key
+        </button>
+        
+        <div id="generatedKey" style="margin-top: 15px; padding: 15px; background: #1a1a1a; border-radius: 5px; display: none;"></div>
+    </div>
+    
+    <div class="panel">
+        <h2>License Keys</h2>
+        <div class="license-list" id="licenseList">
+            <!-- Licenses will appear here -->
+        </div>
+    </div>
+
+    <script>
+        let licenses = JSON.parse(localStorage.getItem('licenses')) || [];
+        
+        function generateCustomKey() {
+            const randomDigits = Math.floor(Math.random() * 90 + 10);
+            const randomLetter = String.fromCharCode(65 + Math.floor(Math.random() * 26));
+            return `THE-F!X_King:${randomDigits}${randomLetter}`;
+        }
+        
+        function generateLicense() {
+            const customer = document.getElementById('customerName').value || 'Unknown';
+            const deviceLimit = parseInt(document.getElementById('deviceLimit').value);
+            const expiryDays = parseInt(document.getElementById('expiryDays').value);
+            
+            const licenseKey = generateCustomKey();
+            const expiryDate = new Date();
+            expiryDate.setDate(expiryDate.getDate() + expiryDays);
+            
+            const newLicense = {
+                key: licenseKey,
+                customer: customer,
+                deviceLimit: deviceLimit,
+                usedDevices: 0,
+                expiryDate: expiryDate.toISOString().split('T')[0],
+                created: new Date().toISOString().split('T')[0],
+                status: 'active'
+            };
+            
+            licenses.unshift(newLicense);
+            saveLicenses();
+            updateStats();
+            loadLicenses();
+            
+            const keyDiv = document.getElementById('generatedKey');
+            keyDiv.innerHTML = `
+                <strong style="color: #00ff00;">✓ License Generated</strong><br>
+                <div style="margin-top: 10px;">
+                    <strong>Key:</strong> <span style="color: #ff0000;">${licenseKey}</span><br>
+                    <strong>For:</strong> ${customer}<br>
+                    <strong>Devices:</strong> ${deviceLimit}<br>
+                    <strong>Expires:</strong> ${newLicense.expiryDate}
+                </div>
+            `;
+            keyDiv.style.display = 'block';
+            
+            document.getElementById('customerName').value = '';
+        }
+        
+        function loadLicenses() {
+            const container = document.getElementById('licenseList');
+            
+            if (licenses.length === 0) {
+                container.innerHTML = '<p style="color: #666; text-align: center;">No licenses yet</p>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            licenses.forEach((license, index) => {
+                const isExpired = new Date(license.expiryDate) < new Date();
+                const status = isExpired ? 'expired' : license.status;
+                
+                const div = document.createElement('div');
+                div.className = 'license-item';
+                div.innerHTML = `
+                    <div class="license-key">${license.key}</div>
+                    <div class="license-info">
+                        <strong>Customer:</strong> ${license.customer} | 
+                        <strong>Devices:</strong> ${license.usedDevices}/${license.deviceLimit}
+                    </div>
+                    <div class="license-info">
+                        <strong>Expires:</strong> ${license.expiryDate} | 
+                        <strong>Status:</strong> <span class="status-${status}">${status.toUpperCase()}</span>
+                    </div>
+                    <div class="license-actions">
+                        <button class="btn btn-sm" onclick="revokeLicense(${index})">Revoke</button>
+                        <button class="btn btn-sm" onclick="extendLicense(${index}, 30)">+30 Days</button>
+                        <button class="btn btn-sm" onclick="deleteLicense(${index})" style="background: #660000;">Delete</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+        
+        function revokeLicense(index) {
+            if (confirm('Revoke this license?')) {
+                licenses[index].status = 'revoked';
+                saveLicenses();
+                loadLicenses();
+                updateStats();
+            }
+        }
+        
+        function extendLicense(index, days) {
+            const newDate = new Date(licenses[index].expiryDate);
+            newDate.setDate(newDate.getDate() + days);
+            licenses[index].expiryDate = newDate.toISOString().split('T')[0];
+            licenses[index].status = 'active';
+            saveLicenses();
+            loadLicenses();
+        }
+        
+        function deleteLicense(index) {
+            if (confirm('Delete this license permanently?')) {
+                licenses.splice(index, 1);
+                saveLicenses();
+                loadLicenses();
+                updateStats();
+            }
+        }
+        
+        function updateStats() {
+            const total = licenses.length;
+            const active = licenses.filter(l => l.status === 'active' && new Date(l.expiryDate) >= new Date()).length;
+            const devices = licenses.reduce((sum, l) => sum + l.usedDevices, 0);
+            
+            document.getElementById('totalLicenses').textContent = total;
+            document.getElementById('activeLicenses').textContent = active;
+            document.getElementById('totalDevices').textContent = devices;
+        }
+        
+        function saveLicenses() {
+            localStorage.setItem('licenses', JSON.stringify(licenses));
+        }
+        
+        updateStats();
+        loadLicenses();
+    </script>
+</body>
+</html>
