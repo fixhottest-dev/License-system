@@ -1,34 +1,190 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>License System</title>
+    <title>Activation Required</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <style>
-        body { 
-            background: #0a0a0a; 
-            color: #ff0000; 
-            font-family: Arial; 
-            text-align: center; 
-            padding: 50px; 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0a0a;
+            font-family: Arial, sans-serif;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
-        a { 
-            color: #ff0000; 
-            text-decoration: none; 
-            margin: 20px; 
-            display: inline-block; 
-            padding: 15px 30px; 
-            border: 2px solid #ff0000; 
-            border-radius: 5px; 
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background: #111111;
+            border: 2px solid #ff0000;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+            text-align: center;
         }
-        a:hover { 
-            background: #ff0000; 
-            color: black; 
+        .logo { margin-bottom: 25px; }
+        .logo h1 { color: #ff0000; font-size: 24px; margin-bottom: 8px; }
+        .logo p { color: #cccccc; font-size: 14px; }
+        .input-group { margin-bottom: 20px; text-align: left; }
+        .input-group label { display: block; color: #ff0000; margin-bottom: 8px; font-size: 14px; }
+        .license-input {
+            width: 100%;
+            padding: 15px;
+            background: #1a1a1a;
+            border: 1px solid #333333;
+            border-radius: 5px;
+            color: #ffffff;
+            font-size: 16px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        .license-input:focus { outline: none; border-color: #ff0000; }
+        .activate-btn {
+            width: 100%;
+            padding: 15px;
+            background: #ff0000;
+            border: none;
+            border-radius: 5px;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .activate-btn:hover { background: #cc0000; }
+        .status-message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 14px;
+            display: none;
+        }
+        .status-success { background: rgba(0, 255, 0, 0.1); border: 1px solid #00ff00; color: #00ff00; }
+        .status-error { background: rgba(255, 0, 0, 0.1); border: 1px solid #ff0000; color: #ff0000; }
+        .contact-info {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #333333;
+            font-size: 12px;
+            color: #666666;
         }
     </style>
 </head>
 <body>
-    <h1>🔐 LICENSE SYSTEM</h1>
-    <p>Choose your page:</p>
-    <a href="activation.html">Activation Page</a>
-    <a href="dashboard.html">License Manager</a>
+    <div class="container">
+        <div class="logo">
+            <h1>🔐 ACTIVATION REQUIRED</h1>
+            <p>Contact admin for license key</p>
+        </div>
+        
+        <div class="input-group">
+            <label>ENTER LICENSE KEY</label>
+            <input type="text" class="license-input" id="licenseKey" placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="19">
+        </div>
+        
+        <button class="activate-btn" onclick="activateApp()">ACTIVATE</button>
+        
+        <div id="statusMessage" class="status-message"></div>
+        
+        <div class="contact-info">
+            <p>ⓘ Contact THE-F!X_King for activation</p>
+            <p>Device: <span id="deviceId">Loading...</span></p>
+        </div>
+    </div>
+
+    <script>
+        // License key formatting
+        document.getElementById('licenseKey').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+            if(value.length > 16) value = value.substring(0, 16);
+            
+            let formatted = '';
+            for(let i = 0; i < value.length; i++) {
+                if(i > 0 && i % 4 === 0) formatted += '-';
+                formatted += value[i];
+            }
+            e.target.value = formatted;
+        });
+
+        // Enter key support
+        document.getElementById('licenseKey').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') activateApp();
+        });
+
+        // Device ID
+        function getDeviceId() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('device_id') || Math.random().toString(36).substr(2, 8).toUpperCase();
+        }
+        document.getElementById('deviceId').textContent = getDeviceId();
+
+        // Activation function
+        async function activateApp() {
+            const licenseKey = document.getElementById('licenseKey').value.replace(/-/g, '');
+            const statusDiv = document.getElementById('statusMessage');
+            
+            statusDiv.style.display = 'none';
+            
+            if (!licenseKey || licenseKey.length !== 16) {
+                showStatus('❌ Invalid license format', 'error');
+                return;
+            }
+
+            showStatus('🔍 Checking license...', 'error');
+            
+            try {
+                const response = await validateLicense(licenseKey);
+                
+                if (response.valid) {
+                    showStatus('✅ Activation successful!', 'success');
+                    // Close WebView and continue to app
+                    setTimeout(() => {
+                        if (window.Android) {
+                            window.Android.activationSuccess(licenseKey);
+                        } else {
+                            // For WebView - this will close the activation
+                            window.location.href = 'app://activation_success?key=' + licenseKey;
+                        }
+                    }, 2000);
+                } else {
+                    showStatus('❌ ' + response.message, 'error');
+                }
+            } catch (error) {
+                showStatus('❌ Server error - try again', 'error');
+            }
+        }
+
+        // License validation
+        async function validateLicense(licenseKey) {
+            // This would call your server API
+            // For demo, using simple validation
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    // Demo validation - replace with your API call
+                    const demoKeys = {
+                        'USER1ABCD1234EFGH': { valid: true, message: 'License activated' },
+                        'PREMIUMKEY9999999': { valid: true, message: 'Premium activated' },
+                        'TESTKEY0000000000': { valid: true, message: 'Test activated' }
+                    };
+                    
+                    if (demoKeys[licenseKey]) {
+                        resolve({ valid: true, message: demoKeys[licenseKey].message });
+                    } else {
+                        resolve({ valid: false, message: 'Invalid license key' });
+                    }
+                }, 1500);
+            });
+        }
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.textContent = message;
+            statusDiv.className = `status-message status-${type}`;
+            statusDiv.style.display = 'block';
+        }
+    </script>
 </body>
 </html>
