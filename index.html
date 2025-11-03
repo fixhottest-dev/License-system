@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Activation - THE-F!X_King</title>
+    <title>Activation</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <style>
         * { 
@@ -67,7 +67,7 @@
             font-size: 11px; 
             text-shadow: 0 0 5px #00ff00;
         }
-        .firebase-status {
+        .github-status {
             padding: 8px;
             border-radius: 5px;
             margin-bottom: 15px;
@@ -101,15 +101,10 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             outline: none;
-            -webkit-user-select: text;
-            user-select: text;
         }
         .license-input:focus { 
             border-color: #00ff00;
             box-shadow: 0 0 10px #00ff00;
-        }
-        .license-input::placeholder {
-            color: #666;
         }
         .buttons-vertical {
             display: flex;
@@ -148,41 +143,20 @@
         .btn-telegram {
             background: linear-gradient(135deg, #ff0000, #cc0000);
             color: #000000;
-            text-shadow: 0 0 5px #000;
             box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
             border: 1px solid #ff0000;
-        }
-        .btn-telegram:hover {
-            background: linear-gradient(135deg, #ff3333, #dd0000);
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
-            transform: translateY(-1px);
         }
         .btn-activate {
             background: linear-gradient(135deg, #00ff00, #00cc00);
             color: #000000;
-            text-shadow: 0 0 5px #000;
             box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
             border: 1px solid #00ff00;
-        }
-        .btn-activate:hover {
-            background: linear-gradient(135deg, #33ff33, #00dd00);
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.7);
-            transform: translateY(-1px);
         }
         .btn-paste {
             background: linear-gradient(135deg, #0088ff, #0066cc);
             color: #000000;
-            text-shadow: 0 0 5px #000;
             box-shadow: 0 0 15px rgba(0, 136, 255, 0.5);
             border: 1px solid #0088ff;
-        }
-        .btn-paste:hover {
-            background: linear-gradient(135deg, #3399ff, #0088ff);
-            box-shadow: 0 0 20px rgba(0, 136, 255, 0.7);
-            transform: translateY(-1px);
-        }
-        .btn:active {
-            transform: translateY(0);
         }
         .status-message {
             margin: 12px 0;
@@ -195,30 +169,15 @@
             text-align: center;
             line-height: 1.4;
         }
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
         .status-success { 
             background: rgba(0, 255, 0, 0.1); 
             border: 1px solid #00ff00; 
             color: #00ff00;
-            text-shadow: 0 0 5px #00ff00;
-            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
         }
         .status-error { 
             background: rgba(255, 0, 0, 0.1); 
             border: 1px solid #ff0000; 
             color: #ff0000;
-            text-shadow: 0 0 5px #ff0000;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
-        }
-        .status-info { 
-            background: rgba(255, 165, 0, 0.1); 
-            border: 1px solid #ffa500; 
-            color: #ffa500;
-            text-shadow: 0 0 5px #ffa500;
-            box-shadow: 0 0 10px rgba(255, 165, 0, 0.3);
         }
         .device-info {
             margin-top: 15px;
@@ -228,60 +187,17 @@
             color: #666;
             line-height: 1.3;
         }
-
-        .matrix-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -2;
-            opacity: 0.1;
-        }
-
-        @media (orientation: landscape) and (max-height: 500px) {
-            body {
-                padding: 10px;
-                align-items: flex-start;
-            }
-            .container {
-                max-width: 90%;
-                padding: 15px;
-                margin-top: 5px;
-            }
-            .logo h1 {
-                font-size: 16px;
-            }
-            .btn {
-                min-height: 40px;
-                padding: 10px;
-            }
-        }
-
-        .license-input {
-            -webkit-user-select: text;
-            -moz-user-select: text;
-            -ms-user-select: text;
-            user-select: text;
-        }
     </style>
-    
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 </head>
 <body>
-    <canvas class="matrix-bg" id="matrixCanvas"></canvas>
-
     <div class="container">
         <div class="logo">
             <h1>⚡ SYSTEM ACTIVATION</h1>
-            <p>THE-F!X_King FIREBASE SYSTEM</p>
+            <p>THE-F!X_King GITHUB SYSTEM</p>
         </div>
         
-        <div id="firebaseStatus" class="firebase-status status-disconnected">
-            🔄 CONNECTING TO FIREBASE...
+        <div id="githubStatus" class="github-status status-disconnected">
+            🌐 GITHUB ONLINE SYSTEM
         </div>
         
         <div class="input-container">
@@ -311,111 +227,33 @@
         <div class="device-info">
             <p>DEVICE: <span id="deviceId" style="color: #00ff00;">LOADING...</span></p>
             <p style="margin-top: 5px;">CONTACT: @THE-F!X_King</p>
-            <p style="margin-top: 5px; font-size: 9px; color: #ffa500;" id="debugInfo"></p>
         </div>
     </div>
 
     <script>
-        // Configuration
-        const TELEGRAM_URL = "https://t.me/THE-F!X_King";
+        // GitHub Gist Configuration - UPDATE THIS WITH YOUR GIST ID
+        const GITHUB_GIST_ID = "352739b7c902e818bf50abbf92ba882e";
         
-        // 🔥 YOUR FIREBASE CONFIGURATION
-        const firebaseConfig = {
-            apiKey: "AIzaSyANzufzW7VxWTOPxQKPXggEbeIHxvjo6P8",
-            authDomain: "the-f-xking-license-system.firebaseapp.com",
-            databaseURL: "https://the-f-xking-license-system-default-rtdb.firebaseio.com",
-            projectId: "the-f-xking-license-system",
-            storageBucket: "the-f-xking-license-system.firebasestorage.app",
-            messagingSenderId: "464590123781",
-            appId: "1:464590123781:web:de0a9a7c26ce419a687d6c"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-
-        // Matrix Rain Effect
-        function initMatrix() {
-            const canvas = document.getElementById('matrixCanvas');
-            const ctx = canvas.getContext('2d');
-            
-            function resizeCanvas() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
-            
-            resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
-            
-            const chars = "THE-F!X_King0123456789";
-            const charArray = chars.split("");
-            const fontSize = 12;
-            const columns = canvas.width / fontSize;
-            const drops = [];
-            
-            for(let i = 0; i < columns; i++) {
-                drops[i] = Math.random() * canvas.height / fontSize;
-            }
-            
-            function drawMatrix() {
-                ctx.fillStyle = "rgba(0, 0, 0, 0.04)";
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                
-                ctx.fillStyle = "#00ff00";
-                ctx.font = fontSize + "px 'Courier New'";
-                
-                for(let i = 0; i < drops.length; i++) {
-                    const text = charArray[Math.floor(Math.random() * charArray.length)];
-                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                    
-                    if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                        drops[i] = 0;
-                    }
-                    drops[i]++;
-                }
-            }
-            
-            setInterval(drawMatrix, 35);
-        }
-
+        // No token needed for reading - GitHub allows public Gist access
+        
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            initMatrix();
             document.getElementById('licenseKey').focus();
             generateDeviceId();
             checkExistingActivation();
-            initializeFirebase();
+            updateGithubStatus();
         });
 
-        // Initialize Firebase Connection
-        function initializeFirebase() {
-            const statusDiv = document.getElementById('firebaseStatus');
-            
-            // Listen for connection state
-            const connectedRef = database.ref(".info/connected");
-            connectedRef.on("value", (snap) => {
-                if (snap.val() === true) {
-                    statusDiv.className = "firebase-status status-connected";
-                    statusDiv.innerHTML = "✅ CONNECTED TO FIREBASE";
-                    showDebugInfo('Firebase connected - Ready for activation');
-                } else {
-                    statusDiv.className = "firebase-status status-disconnected";
-                    statusDiv.innerHTML = "❌ FIREBASE DISCONNECTED";
-                    showDebugInfo('Firebase disconnected - Check internet');
-                }
-            });
+        function updateGithubStatus() {
+            const statusDiv = document.getElementById('githubStatus');
+            statusDiv.className = 'github-status status-connected';
+            statusDiv.innerHTML = '✅ GITHUB ONLINE SYSTEM';
         }
 
-        function showDebugInfo(message) {
-            document.getElementById('debugInfo').textContent = message;
-        }
-
-        // Generate unique device ID
         function generateDeviceId() {
             let deviceId = localStorage.getItem('THE-F!X_King_deviceId');
             if (!deviceId) {
-                deviceId = 'DEV-' + Math.random().toString(36).substr(2, 8).toUpperCase() + 
-                          '-' + Math.random().toString(36).substr(2, 4).toUpperCase();
+                deviceId = 'DEV-' + Math.random().toString(36).substr(2, 8).toUpperCase();
                 localStorage.setItem('THE-F!X_King_deviceId', deviceId);
             }
             document.getElementById('deviceId').textContent = deviceId;
@@ -427,81 +265,56 @@
             let value = e.target.value.toUpperCase();
             
             if (value.startsWith('THE-F!X_KING:')) {
-                if (value.length > 16) {
-                    value = value.substring(0, 16);
-                }
+                if (value.length > 16) value = value.substring(0, 16);
             } else {
                 if (value.length >= 3 && !value.startsWith('THE')) {
                     value = 'THE-F!X_KING:' + value.replace(/[^A-Z0-9]/g, '');
                     if (value.length > 16) value = value.substring(0, 16);
                 }
             }
-            
             e.target.value = value;
-            
-            if (value.length === 16 && value.startsWith('THE-F!X_KING:')) {
-                setTimeout(() => activateApp(), 500);
-            }
         });
 
-        // Enter key support
-        document.getElementById('licenseKey').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                activateApp();
-            }
-        });
-
-        // Get Key - Open Telegram
-        function getKey() {
-            showStatus('🔄 OPENING TELEGRAM...', 'error');
-            setTimeout(() => {
-                window.open(TELEGRAM_URL, '_blank');
-                showStatus('📱 TELEGRAM OPENED - GET YOUR KEY', 'success');
-            }, 500);
-        }
-
-        // Paste Key from clipboard
         async function pasteKey() {
             try {
                 const text = await navigator.clipboard.readText();
                 if (text) {
                     let cleanText = text.toUpperCase().trim();
-                    
                     if (!cleanText.startsWith('THE-F!X_KING:')) {
                         cleanText = 'THE-F!X_KING:' + cleanText.replace(/[^A-Z0-9]/g, '');
                     }
-                    
                     if (cleanText.length > 16) cleanText = cleanText.substring(0, 16);
-                    
                     document.getElementById('licenseKey').value = cleanText;
-                    document.getElementById('licenseKey').focus();
-                    document.getElementById('licenseKey').select();
-                    
-                    showStatus('✅ KEY PASTED SUCCESSFULLY!', 'success');
-                    
-                    if (cleanText.length === 16) {
-                        setTimeout(() => activateApp(), 800);
-                    }
-                } else {
-                    showStatus('❌ NO TEXT IN CLIPBOARD', 'error');
+                    showStatus('✅ KEY PASTED!', 'success');
                 }
             } catch (error) {
-                showStatus('📱 PRESS LONG ON INPUT → PASTE', 'error');
-                document.getElementById('licenseKey').focus();
+                showStatus('📱 PRESS LONG → PASTE', 'error');
             }
         }
 
-        // License Validation with Firebase
+        // Get licenses from GitHub Gist
+        async function getLicensesFromGithub() {
+            try {
+                // Direct raw Gist URL - no authentication needed
+                const response = await fetch(`https://gist.githubusercontent.com/fixhottest-dev/352739b7c902e818bf50abbf92ba882e/raw/d345e089abfccb552c4311a0f824fb9ca5b23926/licenses.json`);
+                
+                if (!response.ok) {
+                    throw new Error('Gist not found');
+                }
+                
+                const data = await response.json();
+                return data.licenses || [];
+            } catch (error) {
+                console.error('GitHub error:', error);
+                return [];
+            }
+        }
+
+        // License Validation
         async function validateLicense(licenseKey) {
             try {
+                const licenses = await getLicensesFromGithub();
                 const deviceId = generateDeviceId();
-                
-                showDebugInfo(`Checking license: ${licenseKey}`);
-                
-                // Get all licenses from Firebase
-                const snapshot = await database.ref("licenses").once("value");
-                const licenses = snapshot.val() ? Object.values(snapshot.val()) : [];
                 
                 // Find the license
                 const validLicense = licenses.find(license => 
@@ -515,20 +328,6 @@
                     // Check if device is already activated
                     const isDeviceActivated = validLicense.activations && 
                                             validLicense.activations.includes(deviceId);
-                    
-                    if (!isDeviceActivated) {
-                        // Add device to activations
-                        if (!validLicense.activations) validLicense.activations = [];
-                        validLicense.activations.push(deviceId);
-                        validLicense.usedDevices = validLicense.activations.length;
-                        
-                        // Find license index and update in Firebase
-                        const licenseIndex = licenses.findIndex(l => l.key === licenseKey);
-                        if (licenseIndex !== -1) {
-                            licenses[licenseIndex] = validLicense;
-                            await database.ref("licenses").set(licenses);
-                        }
-                    }
                     
                     return { 
                         valid: true, 
@@ -545,32 +344,26 @@
                     } else if (new Date(license.expiryDate) < new Date()) {
                         return { valid: false, message: '❌ LICENSE EXPIRED' };
                     } else if ((license.activations ? license.activations.length : 0) >= license.deviceLimit) {
-                        const used = license.activations ? license.activations.length : 0;
-                        return { valid: false, message: `❌ DEVICE LIMIT REACHED (${used}/${license.deviceLimit})` };
+                        return { valid: false, message: '❌ DEVICE LIMIT REACHED' };
                     } else {
                         return { valid: false, message: '❌ LICENSE NOT VALID' };
                     }
                 }
             } catch (error) {
-                console.error('Firebase validation error:', error);
-                return { valid: false, message: '❌ FIREBASE ERROR - TRY AGAIN' };
+                return { valid: false, message: '❌ NETWORK ERROR - TRY AGAIN' };
             }
         }
 
         // Activation function
         async function activateApp() {
             const licenseKey = document.getElementById('licenseKey').value.trim();
-            const statusDiv = document.getElementById('statusMessage');
             
-            statusDiv.style.display = 'none';
-            
-            // Validate format
             if (!licenseKey.startsWith('THE-F!X_KING:') || licenseKey.length !== 16) {
-                showStatus('❌ INVALID FORMAT\nMust be: THE-F!X_KING:XXY', 'error');
+                showStatus('❌ FORMAT: THE-F!X_KING:XXY', 'error');
                 return;
             }
 
-            showStatus('🔍 VERIFYING LICENSE WITH FIREBASE...', 'info');
+            showStatus('🔍 VERIFYING LICENSE...', 'error');
             
             try {
                 const response = await validateLicense(licenseKey);
@@ -578,31 +371,26 @@
                 if (response.valid) {
                     let successMessage = response.message;
                     if (response.isNewActivation) {
-                        successMessage += '\n🆕 NEW DEVICE REGISTERED IN FIREBASE';
+                        successMessage += '\n🆕 DEVICE REGISTERED';
                     } else {
-                        successMessage += '\n✅ DEVICE ALREADY ACTIVATED';
+                        successMessage += '\n✅ ALREADY ACTIVATED';
                     }
                     
-                    // Add license info
                     successMessage += `\n📱 Devices: ${response.license.activations.length}/${response.license.deviceLimit}`;
                     successMessage += `\n📅 Expires: ${response.license.expiryDate}`;
-                    successMessage += `\n🌐 Firebase: SYNCED`;
+                    successMessage += `\n🌐 GitHub: ONLINE`;
                     
                     showStatus(successMessage, 'success');
                     
-                    // Store activation in localStorage
+                    // Store activation
                     localStorage.setItem('THE-F!X_King_activated', 'true');
                     localStorage.setItem('THE-F!X_King_license', licenseKey);
-                    localStorage.setItem('THE-F!X_King_activation_time', new Date().toISOString());
-                    
-                    showDebugInfo(`Activated: ${licenseKey} - Firebase Updated`);
                     
                 } else {
                     showStatus(response.message, 'error');
                 }
             } catch (error) {
-                showStatus('❌ FIREBASE CONNECTION ERROR', 'error');
-                showDebugInfo('Firebase error: ' + error.message);
+                showStatus('❌ NETWORK ERROR', 'error');
             }
         }
 
@@ -613,22 +401,19 @@
             statusDiv.style.display = 'block';
         }
 
-        // Check if already activated
         function checkExistingActivation() {
             const isActivated = localStorage.getItem('THE-F!X_King_activated');
             const licenseKey = localStorage.getItem('THE-F!X_King_license');
-            const activationTime = localStorage.getItem('THE-F!X_King_activation_time');
             
             if (isActivated && licenseKey) {
                 document.getElementById('licenseKey').value = licenseKey;
-                const time = activationTime ? new Date(activationTime).toLocaleString() : 'Unknown';
-                showStatus(`✅ SYSTEM ALREADY ACTIVATED\n⏰ Activated: ${time}\n🌐 Firebase: READY`, 'success');
-                showDebugInfo(`Already activated: ${licenseKey}`);
+                showStatus('✅ SYSTEM ALREADY ACTIVATED\n🌐 GitHub: ONLINE', 'success');
             }
         }
 
-        // Mobile optimizations
-        document.addEventListener('touchstart', function() {}, {passive: true});
+        function getKey() {
+            showStatus('📱 CONTACT @THE-F!X_King', 'error');
+        }
     </script>
 </body>
 </html>
