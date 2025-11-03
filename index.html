@@ -175,6 +175,7 @@
             display: none;
             animation: slideDown 0.3s ease;
             text-align: center;
+            line-height: 1.4;
         }
         @keyframes slideDown {
             from { opacity: 0; transform: translateY(-8px); }
@@ -193,6 +194,13 @@
             color: #ff0000;
             text-shadow: 0 0 5px #ff0000;
             box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+        }
+        .status-info { 
+            background: rgba(255, 165, 0, 0.1); 
+            border: 1px solid #ffa500; 
+            color: #ffa500;
+            text-shadow: 0 0 5px #ffa500;
+            box-shadow: 0 0 10px rgba(255, 165, 0, 0.3);
         }
         .device-info {
             margin-top: 15px;
@@ -281,12 +289,47 @@
         <div class="device-info">
             <p>DEVICE: <span id="deviceId" style="color: #00ff00;">LOADING...</span></p>
             <p style="margin-top: 5px;">CONTACT: @THE-F!X_King</p>
+            <p style="margin-top: 5px; font-size: 9px; color: #ffa500;" id="debugInfo"></p>
         </div>
     </div>
 
     <script>
         // Configuration
         const TELEGRAM_URL = "https://t.me/THE-F!X_King";
+        
+        // Demo licenses for testing (remove in production)
+        const DEMO_LICENSES = [
+            {
+                key: "THE-F!X_KING:88A",
+                customer: "Demo User 1",
+                deviceLimit: 3,
+                usedDevices: 0,
+                expiryDate: "2025-12-31",
+                created: "2024-01-01",
+                status: "active",
+                activations: []
+            },
+            {
+                key: "THE-F!X_KING:45B",
+                customer: "Demo User 2", 
+                deviceLimit: 5,
+                usedDevices: 1,
+                expiryDate: "2025-12-31",
+                created: "2024-01-01",
+                status: "active",
+                activations: ["DEV-DEMO12345"]
+            },
+            {
+                key: "THE-F!X_KING:67C",
+                customer: "Demo User 3",
+                deviceLimit: 2,
+                usedDevices: 2,
+                expiryDate: "2024-01-01",
+                created: "2024-01-01",
+                status: "expired",
+                activations: ["DEV-DEMO12345", "DEV-DEMO67890"]
+            }
+        ];
 
         // Matrix Rain Effect
         function initMatrix() {
@@ -338,7 +381,24 @@
             document.getElementById('licenseKey').focus();
             generateDeviceId();
             checkExistingActivation();
+            initializeDemoData();
         });
+
+        // Initialize demo data if no licenses exist
+        function initializeDemoData() {
+            const existingLicenses = getLicensesFromStorage();
+            if (existingLicenses.length === 0) {
+                // Save demo licenses to storage
+                localStorage.setItem('THE-F!X_King_licenses', JSON.stringify(DEMO_LICENSES));
+                showDebugInfo('Demo licenses loaded. Try: THE-F!X_KING:88A');
+            } else {
+                showDebugInfo(`${existingLicenses.length} licenses in database`);
+            }
+        }
+
+        function showDebugInfo(message) {
+            document.getElementById('debugInfo').textContent = message;
+        }
 
         // Generate unique device ID
         function generateDeviceId() {
@@ -350,6 +410,32 @@
             }
             document.getElementById('deviceId').textContent = deviceId;
             return deviceId;
+        }
+
+        // Get licenses from storage with error handling
+        function getLicensesFromStorage() {
+            try {
+                const licensesData = localStorage.getItem('THE-F!X_King_licenses');
+                if (!licensesData) {
+                    return [];
+                }
+                const licenses = JSON.parse(licensesData);
+                return Array.isArray(licenses) ? licenses : [];
+            } catch (error) {
+                console.error('Error reading licenses:', error);
+                return [];
+            }
+        }
+
+        // Save licenses to storage with error handling
+        function saveLicensesToStorage(licenses) {
+            try {
+                localStorage.setItem('THE-F!X_King_licenses', JSON.stringify(licenses));
+                return true;
+            } catch (error) {
+                console.error('Error saving licenses:', error);
+                return false;
+            }
         }
 
         // License key formatting
@@ -425,11 +511,11 @@
         // License Validation
         function validateLicense(licenseKey) {
             try {
-                // Get licenses from localStorage (shared with admin)
-                const licensesData = localStorage.getItem('THE-F!X_King_licenses');
-                const licenses = licensesData ? JSON.parse(licensesData) : [];
-                
+                // Get licenses from localStorage
+                const licenses = getLicensesFromStorage();
                 const deviceId = generateDeviceId();
+                
+                showDebugInfo(`Checking ${licenses.length} licenses...`);
                 
                 // Find the license
                 const validLicense = licenses.find(license => 
@@ -451,7 +537,10 @@
                         validLicense.usedDevices = validLicense.activations.length;
                         
                         // Save back to localStorage
-                        localStorage.setItem('THE-F!X_King_licenses', JSON.stringify(licenses));
+                        const saveSuccess = saveLicensesToStorage(licenses);
+                        if (!saveSuccess) {
+                            return { valid: false, message: '❌ DATABASE ERROR - TRY AGAIN' };
+                        }
                     }
                     
                     return { 
@@ -469,7 +558,8 @@
                     } else if (new Date(license.expiryDate) < new Date()) {
                         return { valid: false, message: '❌ LICENSE EXPIRED' };
                     } else if ((license.activations ? license.activations.length : 0) >= license.deviceLimit) {
-                        return { valid: false, message: '❌ DEVICE LIMIT REACHED' };
+                        const used = license.activations ? license.activations.length : 0;
+                        return { valid: false, message: `❌ DEVICE LIMIT REACHED (${used}/${license.deviceLimit})` };
                     } else {
                         return { valid: false, message: '❌ LICENSE NOT VALID' };
                     }
@@ -487,12 +577,13 @@
             
             statusDiv.style.display = 'none';
             
+            // Validate format
             if (!licenseKey.startsWith('THE-F!X_KING:') || licenseKey.length !== 16) {
-                showStatus('❌ FORMAT: THE-F!X_KING:XXY', 'error');
+                showStatus('❌ INVALID FORMAT\nMust be: THE-F!X_KING:XXY', 'error');
                 return;
             }
 
-            showStatus('🔍 VERIFYING LICENSE...', 'error');
+            showStatus('🔍 VERIFYING LICENSE...', 'info');
             
             setTimeout(() => {
                 try {
@@ -501,10 +592,14 @@
                     if (response.valid) {
                         let successMessage = response.message;
                         if (response.isNewActivation) {
-                            successMessage += ' 🆕 Device registered';
+                            successMessage += '\n🆕 NEW DEVICE REGISTERED';
                         } else {
-                            successMessage += ' ✅ Already activated';
+                            successMessage += '\n✅ DEVICE ALREADY ACTIVATED';
                         }
+                        
+                        // Add license info
+                        successMessage += `\n📱 Devices: ${response.license.activations.length}/${response.license.deviceLimit}`;
+                        successMessage += `\n📅 Expires: ${response.license.expiryDate}`;
                         
                         showStatus(successMessage, 'success');
                         
@@ -513,19 +608,14 @@
                         localStorage.setItem('THE-F!X_King_license', licenseKey);
                         localStorage.setItem('THE-F!X_King_activation_time', new Date().toISOString());
                         
-                        setTimeout(() => {
-                            if (window.Android) {
-                                window.Android.activationSuccess(licenseKey);
-                            } else {
-                                // For web demo
-                                showStatus('🎉 SYSTEM ACTIVATED SUCCESSFULLY!', 'success');
-                            }
-                        }, 2000);
+                        showDebugInfo(`Activated: ${licenseKey}`);
+                        
                     } else {
                         showStatus(response.message, 'error');
                     }
                 } catch (error) {
                     showStatus('❌ SYSTEM ERROR - CONTACT ADMIN', 'error');
+                    showDebugInfo('Error: ' + error.message);
                 }
             }, 1500);
         }
@@ -547,6 +637,7 @@
                 document.getElementById('licenseKey').value = licenseKey;
                 const time = activationTime ? new Date(activationTime).toLocaleString() : 'Unknown';
                 showStatus(`✅ SYSTEM ALREADY ACTIVATED\n⏰ Activated: ${time}`, 'success');
+                showDebugInfo(`Already activated: ${licenseKey}`);
             }
         }
 
