@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Activation</title>
+    <title>Activation - THE-F!X_King</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <style>
         * { 
@@ -23,14 +23,12 @@
         }
         .container {
             width: 100%;
-            max-width: 280px;
+            max-width: 320px;
             background: #000000;
             border: 2px solid #ff0000;
             border-radius: 10px;
-            padding: 15px;
-            box-shadow: 
-                0 0 25px #ff0000,
-                inset 0 0 25px rgba(255, 0, 0, 0.1);
+            padding: 20px;
+            box-shadow: 0 0 25px #ff0000;
             text-align: center;
             position: relative;
         }
@@ -51,11 +49,11 @@
             50% { opacity: 0.7; }
         }
         .logo { 
-            margin-bottom: 15px; 
+            margin-bottom: 20px; 
         }
         .logo h1 { 
             color: #ff0000; 
-            font-size: 16px; 
+            font-size: 18px; 
             margin-bottom: 5px;
             text-shadow: 0 0 10px #ff0000;
             animation: textFlicker 3s infinite;
@@ -66,27 +64,25 @@
         }
         .logo p { 
             color: #00ff00; 
-            font-size: 10px; 
+            font-size: 11px; 
             text-shadow: 0 0 5px #00ff00;
         }
         .input-container {
-            margin-bottom: 12px;
+            margin-bottom: 15px;
         }
         .license-input {
             width: 100%;
-            padding: 10px 12px;
+            padding: 12px 15px;
             background: #111111;
             border: 1px solid #ff0000;
             border-radius: 5px;
             color: #00ff00;
-            font-size: 12px;
+            font-size: 14px;
             font-family: 'Courier New', monospace;
             text-align: center;
             text-transform: uppercase;
             letter-spacing: 1px;
             outline: none;
-            -webkit-user-select: text;
-            user-select: text;
         }
         .license-input:focus { 
             border-color: #00ff00;
@@ -98,21 +94,21 @@
         .buttons-vertical {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            margin: 12px 0;
+            gap: 10px;
+            margin: 15px 0;
         }
         .btn {
-            padding: 10px;
+            padding: 14px;
             border: none;
             border-radius: 5px;
-            font-size: 11px;
+            font-size: 13px;
             font-weight: bold;
             font-family: 'Courier New', monospace;
             cursor: pointer;
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 1px;
-            min-height: 38px;
+            min-height: 45px;
             position: relative;
             overflow: hidden;
         }
@@ -129,34 +125,9 @@
         .btn:hover::before {
             left: 100%;
         }
-        .btn-paste {
-            background: linear-gradient(135deg, #0088ff, #0066cc);
-            color: #000000;
-            text-shadow: 0 0 5px #000;
-            box-shadow: 0 0 15px rgba(0, 136, 255, 0.5);
-            border: 1px solid #0088ff;
-        }
-        .btn-paste:hover {
-            background: linear-gradient(135deg, #3399ff, #0088ff);
-            box-shadow: 0 0 20px rgba(0, 136, 255, 0.7);
-            transform: translateY(-1px);
-        }
-        .btn-activate {
-            background: linear-gradient(135deg, #00ff00, #00cc00);
-            color: #000000;
-            text-shadow: 0 0 5px #000;
-            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
-            border: 1px solid #00ff00;
-        }
-        .btn-activate:hover {
-            background: linear-gradient(135deg, #33ff33, #00dd00);
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.7);
-            transform: translateY(-1px);
-        }
         .btn-telegram {
             background: linear-gradient(135deg, #ff0000, #cc0000);
             color: #000000;
-            text-shadow: 0 0 5px #000;
             box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
             border: 1px solid #ff0000;
         }
@@ -165,14 +136,36 @@
             box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
             transform: translateY(-1px);
         }
+        .btn-activate {
+            background: linear-gradient(135deg, #00ff00, #00cc00);
+            color: #000000;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+            border: 1px solid #00ff00;
+        }
+        .btn-activate:hover {
+            background: linear-gradient(135deg, #33ff33, #00dd00);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.7);
+            transform: translateY(-1px);
+        }
+        .btn-paste {
+            background: linear-gradient(135deg, #0088ff, #0066cc);
+            color: #000000;
+            box-shadow: 0 0 15px rgba(0, 136, 255, 0.5);
+            border: 1px solid #0088ff;
+        }
+        .btn-paste:hover {
+            background: linear-gradient(135deg, #3399ff, #0088ff);
+            box-shadow: 0 0 20px rgba(0, 136, 255, 0.7);
+            transform: translateY(-1px);
+        }
         .btn:active {
             transform: translateY(0);
         }
         .status-message {
-            margin: 10px 0;
-            padding: 8px;
+            margin: 12px 0;
+            padding: 10px;
             border-radius: 5px;
-            font-size: 10px;
+            font-size: 11px;
             font-weight: bold;
             display: none;
             animation: slideDown 0.3s ease;
@@ -186,26 +179,23 @@
             background: rgba(0, 255, 0, 0.1); 
             border: 1px solid #00ff00; 
             color: #00ff00;
-            text-shadow: 0 0 5px #00ff00;
             box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
         }
         .status-error { 
             background: rgba(255, 0, 0, 0.1); 
             border: 1px solid #ff0000; 
             color: #ff0000;
-            text-shadow: 0 0 5px #ff0000;
             box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
         }
         .device-info {
-            margin-top: 12px;
-            padding-top: 10px;
+            margin-top: 15px;
+            padding-top: 12px;
             border-top: 1px solid #333;
-            font-size: 9px;
+            font-size: 10px;
             color: #666;
             line-height: 1.3;
         }
 
-        /* Matrix rain effect */
         .matrix-bg {
             position: fixed;
             top: 0;
@@ -217,7 +207,6 @@
             opacity: 0.1;
         }
 
-        /* Landscape optimization */
         @media (orientation: landscape) and (max-height: 500px) {
             body {
                 padding: 10px;
@@ -225,19 +214,18 @@
             }
             .container {
                 max-width: 90%;
-                padding: 12px;
+                padding: 15px;
                 margin-top: 5px;
             }
             .logo h1 {
-                font-size: 14px;
+                font-size: 16px;
             }
             .btn {
-                min-height: 35px;
-                padding: 8px;
+                min-height: 40px;
+                padding: 10px;
             }
         }
 
-        /* Enable text operations */
         .license-input {
             -webkit-user-select: text;
             -moz-user-select: text;
@@ -247,7 +235,6 @@
     </style>
 </head>
 <body>
-    <!-- Matrix Background -->
     <canvas class="matrix-bg" id="matrixCanvas"></canvas>
 
     <div class="container">
@@ -258,7 +245,7 @@
         
         <div class="input-container">
             <input type="text" class="license-input" id="licenseKey" 
-                   placeholder="THE-F!X_King:XXY" 
+                   placeholder="THE-F!X_KING:XXY" 
                    maxlength="19" 
                    autocomplete="on"
                    autocorrect="off"
@@ -271,10 +258,10 @@
                 📋 PASTE KEY
             </button>
             <button class="btn btn-activate" onclick="activateApp()">
-                ⚡ ACTIVATE
+                ⚡ ACTIVATE SYSTEM
             </button>
             <button class="btn btn-telegram" onclick="getKey()">
-                🔑 GET KEY
+                🔑 GET LICENSE KEY
             </button>
         </div>
         
@@ -282,37 +269,12 @@
         
         <div class="device-info">
             <p>DEVICE: <span id="deviceId" style="color: #00ff00;">LOADING...</span></p>
-            <p style="margin-top: 5px;">CONTACT: THE-F!X_King</p>
+            <p style="margin-top: 5px;">CONTACT: @THE-F!X_King</p>
         </div>
     </div>
 
     <script>
-        // === CONFIGURATION ===
-        // Using a hardcoded license list to avoid GitHub API issues
-        const VALID_LICENSES = [
-            {
-                key: "THE-F!X_KING:ABC",
-                status: "active",
-                expiryDate: "2025-12-31",
-                deviceLimit: 3,
-                usedDevices: 1
-            },
-            {
-                key: "THE-F!X_KING:XYZ",
-                status: "active",
-                expiryDate: "2025-12-31",
-                deviceLimit: 5,
-                usedDevices: 2
-            },
-            {
-                key: "THE-F!X_KING:123",
-                status: "active",
-                expiryDate: "2025-12-31",
-                deviceLimit: 2,
-                usedDevices: 0
-            }
-        ];
-
+        // Configuration
         const TELEGRAM_URL = "https://t.me/THE-F!X_King";
 
         // Matrix Rain Effect
@@ -363,19 +325,30 @@
         document.addEventListener('DOMContentLoaded', function() {
             initMatrix();
             document.getElementById('licenseKey').focus();
+            generateDeviceId();
         });
 
-        // License key formatting for THE-F!X_King:XXY format
+        // Generate unique device ID
+        function generateDeviceId() {
+            let deviceId = localStorage.getItem('THE-F!X_King_deviceId');
+            if (!deviceId) {
+                deviceId = 'DEV-' + Math.random().toString(36).substr(2, 8).toUpperCase() + 
+                          '-' + Math.random().toString(36).substr(2, 4).toUpperCase();
+                localStorage.setItem('THE-F!X_King_deviceId', deviceId);
+            }
+            document.getElementById('deviceId').textContent = deviceId;
+            return deviceId;
+        }
+
+        // License key formatting
         document.getElementById('licenseKey').addEventListener('input', function(e) {
             let value = e.target.value.toUpperCase();
             
-            // Auto-format as user types
             if (value.startsWith('THE-F!X_KING:')) {
                 if (value.length > 16) {
                     value = value.substring(0, 16);
                 }
             } else {
-                // If doesn't start with prefix, help user
                 if (value.length >= 3 && !value.startsWith('THE')) {
                     value = 'THE-F!X_KING:' + value.replace(/[^A-Z0-9]/g, '');
                     if (value.length > 16) value = value.substring(0, 16);
@@ -384,7 +357,6 @@
             
             e.target.value = value;
             
-            // Auto-activate when complete key is entered
             if (value.length === 16 && value.startsWith('THE-F!X_KING:')) {
                 setTimeout(() => activateApp(), 500);
             }
@@ -397,13 +369,6 @@
                 activateApp();
             }
         });
-
-        // Device ID
-        function getDeviceId() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('device_id') || 'DEV-' + Math.random().toString(36).substr(2, 6).toUpperCase();
-        }
-        document.getElementById('deviceId').textContent = getDeviceId();
 
         // Get Key - Open Telegram
         function getKey() {
@@ -421,7 +386,6 @@
                 if (text) {
                     let cleanText = text.toUpperCase().trim();
                     
-                    // Ensure it has the correct format
                     if (!cleanText.startsWith('THE-F!X_KING:')) {
                         cleanText = 'THE-F!X_KING:' + cleanText.replace(/[^A-Z0-9]/g, '');
                     }
@@ -434,7 +398,6 @@
                     
                     showStatus('✅ KEY PASTED SUCCESSFULLY!', 'success');
                     
-                    // Auto-activate if complete key
                     if (cleanText.length === 16) {
                         setTimeout(() => activateApp(), 800);
                     }
@@ -447,11 +410,17 @@
             }
         }
 
-        // License Validation (using hardcoded list to avoid network issues)
+        // License Validation
         async function validateLicense(licenseKey) {
             try {
-                // Find the license (exact match with THE-F!X_King:XXY format)
-                const validLicense = VALID_LICENSES.find(license => 
+                // Get licenses from localStorage (shared with admin)
+                const licensesData = localStorage.getItem('THE-F!X_King_licenses');
+                const licenses = licensesData ? JSON.parse(licensesData) : [];
+                
+                const deviceId = generateDeviceId();
+                
+                // Find the license
+                const validLicense = licenses.find(license => 
                     license.key === licenseKey && 
                     license.status === 'active' &&
                     new Date(license.expiryDate) >= new Date() &&
@@ -459,13 +428,27 @@
                 );
                 
                 if (validLicense) {
+                    // Check if device is already activated
+                    const isDeviceActivated = validLicense.activations && 
+                                            validLicense.activations.includes(deviceId);
+                    
+                    if (!isDeviceActivated) {
+                        // Add device to activations
+                        if (!validLicense.activations) validLicense.activations = [];
+                        validLicense.activations.push(deviceId);
+                        validLicense.usedDevices = validLicense.activations.length;
+                        
+                        // Save back to localStorage
+                        localStorage.setItem('THE-F!X_King_licenses', JSON.stringify(licenses));
+                    }
+                    
                     return { 
                         valid: true, 
                         message: '✅ ACTIVATION SUCCESSFUL!',
                         license: validLicense
                     };
                 } else {
-                    const license = VALID_LICENSES.find(l => l.key === licenseKey);
+                    const license = licenses.find(l => l.key === licenseKey);
                     if (!license) {
                         return { valid: false, message: '❌ INVALID LICENSE KEY' };
                     } else if (license.status !== 'active') {
@@ -491,9 +474,8 @@
             
             statusDiv.style.display = 'none';
             
-            // Validate format
             if (!licenseKey.startsWith('THE-F!X_KING:') || licenseKey.length !== 16) {
-                showStatus('❌ FORMAT: THE-F!X_King:XXY', 'error');
+                showStatus('❌ FORMAT: THE-F!X_KING:XXY', 'error');
                 return;
             }
 
@@ -505,12 +487,16 @@
                 if (response.valid) {
                     showStatus(response.message, 'success');
                     
-                    // Success - close activation
+                    // Store activation in localStorage
+                    localStorage.setItem('THE-F!X_King_activated', 'true');
+                    localStorage.setItem('THE-F!X_King_license', licenseKey);
+                    
                     setTimeout(() => {
                         if (window.Android) {
                             window.Android.activationSuccess(licenseKey);
                         } else {
-                            window.location.href = 'app://activation_success?key=' + licenseKey;
+                            // For web demo
+                            showStatus('🎉 SYSTEM ACTIVATED SUCCESSFULLY!', 'success');
                         }
                     }, 2000);
                 } else {
@@ -528,8 +514,22 @@
             statusDiv.style.display = 'block';
         }
 
+        // Check if already activated
+        function checkExistingActivation() {
+            const isActivated = localStorage.getItem('THE-F!X_King_activated');
+            const licenseKey = localStorage.getItem('THE-F!X_King_license');
+            
+            if (isActivated && licenseKey) {
+                document.getElementById('licenseKey').value = licenseKey;
+                showStatus('✅ SYSTEM ALREADY ACTIVATED', 'success');
+            }
+        }
+
         // Mobile optimizations
         document.addEventListener('touchstart', function() {}, {passive: true});
+        
+        // Check activation on load
+        setTimeout(checkExistingActivation, 1000);
     </script>
 </body>
 </html>
