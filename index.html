@@ -67,6 +67,24 @@
             font-size: 11px; 
             text-shadow: 0 0 5px #00ff00;
         }
+        .firebase-status {
+            padding: 8px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .status-connected {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+        }
+        .status-disconnected {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid #ff0000;
+            color: #ff0000;
+        }
         .input-container {
             margin-bottom: 15px;
         }
@@ -211,7 +229,6 @@
             line-height: 1.3;
         }
 
-        /* Matrix rain effect */
         .matrix-bg {
             position: fixed;
             top: 0;
@@ -223,7 +240,6 @@
             opacity: 0.1;
         }
 
-        /* Landscape optimization */
         @media (orientation: landscape) and (max-height: 500px) {
             body {
                 padding: 10px;
@@ -243,7 +259,6 @@
             }
         }
 
-        /* Enable text operations */
         .license-input {
             -webkit-user-select: text;
             -moz-user-select: text;
@@ -251,15 +266,22 @@
             user-select: text;
         }
     </style>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 </head>
 <body>
-    <!-- Matrix Background -->
     <canvas class="matrix-bg" id="matrixCanvas"></canvas>
 
     <div class="container">
         <div class="logo">
             <h1>⚡ SYSTEM ACTIVATION</h1>
-            <p>THE-F!X_King LICENSE SYSTEM</p>
+            <p>THE-F!X_King FIREBASE SYSTEM</p>
+        </div>
+        
+        <div id="firebaseStatus" class="firebase-status status-disconnected">
+            🔄 CONNECTING TO FIREBASE...
         </div>
         
         <div class="input-container">
@@ -297,39 +319,20 @@
         // Configuration
         const TELEGRAM_URL = "https://t.me/THE-F!X_King";
         
-        // Demo licenses for testing (remove in production)
-        const DEMO_LICENSES = [
-            {
-                key: "THE-F!X_KING:88A",
-                customer: "Demo User 1",
-                deviceLimit: 3,
-                usedDevices: 0,
-                expiryDate: "2025-12-31",
-                created: "2024-01-01",
-                status: "active",
-                activations: []
-            },
-            {
-                key: "THE-F!X_KING:45B",
-                customer: "Demo User 2", 
-                deviceLimit: 5,
-                usedDevices: 1,
-                expiryDate: "2025-12-31",
-                created: "2024-01-01",
-                status: "active",
-                activations: ["DEV-DEMO12345"]
-            },
-            {
-                key: "THE-F!X_KING:67C",
-                customer: "Demo User 3",
-                deviceLimit: 2,
-                usedDevices: 2,
-                expiryDate: "2024-01-01",
-                created: "2024-01-01",
-                status: "expired",
-                activations: ["DEV-DEMO12345", "DEV-DEMO67890"]
-            }
-        ];
+        // 🔥 YOUR FIREBASE CONFIGURATION
+        const firebaseConfig = {
+            apiKey: "AIzaSyANzufzW7VxWTOPxQKPXggEbeIHxvjo6P8",
+            authDomain: "the-f-xking-license-system.firebaseapp.com",
+            databaseURL: "https://the-f-xking-license-system-default-rtdb.firebaseio.com",
+            projectId: "the-f-xking-license-system",
+            storageBucket: "the-f-xking-license-system.firebasestorage.app",
+            messagingSenderId: "464590123781",
+            appId: "1:464590123781:web:de0a9a7c26ce419a687d6c"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
 
         // Matrix Rain Effect
         function initMatrix() {
@@ -381,19 +384,26 @@
             document.getElementById('licenseKey').focus();
             generateDeviceId();
             checkExistingActivation();
-            initializeDemoData();
+            initializeFirebase();
         });
 
-        // Initialize demo data if no licenses exist
-        function initializeDemoData() {
-            const existingLicenses = getLicensesFromStorage();
-            if (existingLicenses.length === 0) {
-                // Save demo licenses to storage
-                localStorage.setItem('THE-F!X_King_licenses', JSON.stringify(DEMO_LICENSES));
-                showDebugInfo('Demo licenses loaded. Try: THE-F!X_KING:88A');
-            } else {
-                showDebugInfo(`${existingLicenses.length} licenses in database`);
-            }
+        // Initialize Firebase Connection
+        function initializeFirebase() {
+            const statusDiv = document.getElementById('firebaseStatus');
+            
+            // Listen for connection state
+            const connectedRef = database.ref(".info/connected");
+            connectedRef.on("value", (snap) => {
+                if (snap.val() === true) {
+                    statusDiv.className = "firebase-status status-connected";
+                    statusDiv.innerHTML = "✅ CONNECTED TO FIREBASE";
+                    showDebugInfo('Firebase connected - Ready for activation');
+                } else {
+                    statusDiv.className = "firebase-status status-disconnected";
+                    statusDiv.innerHTML = "❌ FIREBASE DISCONNECTED";
+                    showDebugInfo('Firebase disconnected - Check internet');
+                }
+            });
         }
 
         function showDebugInfo(message) {
@@ -410,32 +420,6 @@
             }
             document.getElementById('deviceId').textContent = deviceId;
             return deviceId;
-        }
-
-        // Get licenses from storage with error handling
-        function getLicensesFromStorage() {
-            try {
-                const licensesData = localStorage.getItem('THE-F!X_King_licenses');
-                if (!licensesData) {
-                    return [];
-                }
-                const licenses = JSON.parse(licensesData);
-                return Array.isArray(licenses) ? licenses : [];
-            } catch (error) {
-                console.error('Error reading licenses:', error);
-                return [];
-            }
-        }
-
-        // Save licenses to storage with error handling
-        function saveLicensesToStorage(licenses) {
-            try {
-                localStorage.setItem('THE-F!X_King_licenses', JSON.stringify(licenses));
-                return true;
-            } catch (error) {
-                console.error('Error saving licenses:', error);
-                return false;
-            }
         }
 
         // License key formatting
@@ -508,14 +492,16 @@
             }
         }
 
-        // License Validation
-        function validateLicense(licenseKey) {
+        // License Validation with Firebase
+        async function validateLicense(licenseKey) {
             try {
-                // Get licenses from localStorage
-                const licenses = getLicensesFromStorage();
                 const deviceId = generateDeviceId();
                 
-                showDebugInfo(`Checking ${licenses.length} licenses...`);
+                showDebugInfo(`Checking license: ${licenseKey}`);
+                
+                // Get all licenses from Firebase
+                const snapshot = await database.ref("licenses").once("value");
+                const licenses = snapshot.val() ? Object.values(snapshot.val()) : [];
                 
                 // Find the license
                 const validLicense = licenses.find(license => 
@@ -536,10 +522,11 @@
                         validLicense.activations.push(deviceId);
                         validLicense.usedDevices = validLicense.activations.length;
                         
-                        // Save back to localStorage
-                        const saveSuccess = saveLicensesToStorage(licenses);
-                        if (!saveSuccess) {
-                            return { valid: false, message: '❌ DATABASE ERROR - TRY AGAIN' };
+                        // Find license index and update in Firebase
+                        const licenseIndex = licenses.findIndex(l => l.key === licenseKey);
+                        if (licenseIndex !== -1) {
+                            licenses[licenseIndex] = validLicense;
+                            await database.ref("licenses").set(licenses);
                         }
                     }
                     
@@ -565,13 +552,13 @@
                     }
                 }
             } catch (error) {
-                console.error('Validation error:', error);
-                return { valid: false, message: '❌ SYSTEM ERROR - TRY AGAIN' };
+                console.error('Firebase validation error:', error);
+                return { valid: false, message: '❌ FIREBASE ERROR - TRY AGAIN' };
             }
         }
 
         // Activation function
-        function activateApp() {
+        async function activateApp() {
             const licenseKey = document.getElementById('licenseKey').value.trim();
             const statusDiv = document.getElementById('statusMessage');
             
@@ -583,41 +570,40 @@
                 return;
             }
 
-            showStatus('🔍 VERIFYING LICENSE...', 'info');
+            showStatus('🔍 VERIFYING LICENSE WITH FIREBASE...', 'info');
             
-            setTimeout(() => {
-                try {
-                    const response = validateLicense(licenseKey);
-                    
-                    if (response.valid) {
-                        let successMessage = response.message;
-                        if (response.isNewActivation) {
-                            successMessage += '\n🆕 NEW DEVICE REGISTERED';
-                        } else {
-                            successMessage += '\n✅ DEVICE ALREADY ACTIVATED';
-                        }
-                        
-                        // Add license info
-                        successMessage += `\n📱 Devices: ${response.license.activations.length}/${response.license.deviceLimit}`;
-                        successMessage += `\n📅 Expires: ${response.license.expiryDate}`;
-                        
-                        showStatus(successMessage, 'success');
-                        
-                        // Store activation in localStorage
-                        localStorage.setItem('THE-F!X_King_activated', 'true');
-                        localStorage.setItem('THE-F!X_King_license', licenseKey);
-                        localStorage.setItem('THE-F!X_King_activation_time', new Date().toISOString());
-                        
-                        showDebugInfo(`Activated: ${licenseKey}`);
-                        
+            try {
+                const response = await validateLicense(licenseKey);
+                
+                if (response.valid) {
+                    let successMessage = response.message;
+                    if (response.isNewActivation) {
+                        successMessage += '\n🆕 NEW DEVICE REGISTERED IN FIREBASE';
                     } else {
-                        showStatus(response.message, 'error');
+                        successMessage += '\n✅ DEVICE ALREADY ACTIVATED';
                     }
-                } catch (error) {
-                    showStatus('❌ SYSTEM ERROR - CONTACT ADMIN', 'error');
-                    showDebugInfo('Error: ' + error.message);
+                    
+                    // Add license info
+                    successMessage += `\n📱 Devices: ${response.license.activations.length}/${response.license.deviceLimit}`;
+                    successMessage += `\n📅 Expires: ${response.license.expiryDate}`;
+                    successMessage += `\n🌐 Firebase: SYNCED`;
+                    
+                    showStatus(successMessage, 'success');
+                    
+                    // Store activation in localStorage
+                    localStorage.setItem('THE-F!X_King_activated', 'true');
+                    localStorage.setItem('THE-F!X_King_license', licenseKey);
+                    localStorage.setItem('THE-F!X_King_activation_time', new Date().toISOString());
+                    
+                    showDebugInfo(`Activated: ${licenseKey} - Firebase Updated`);
+                    
+                } else {
+                    showStatus(response.message, 'error');
                 }
-            }, 1500);
+            } catch (error) {
+                showStatus('❌ FIREBASE CONNECTION ERROR', 'error');
+                showDebugInfo('Firebase error: ' + error.message);
+            }
         }
 
         function showStatus(message, type) {
@@ -636,7 +622,7 @@
             if (isActivated && licenseKey) {
                 document.getElementById('licenseKey').value = licenseKey;
                 const time = activationTime ? new Date(activationTime).toLocaleString() : 'Unknown';
-                showStatus(`✅ SYSTEM ALREADY ACTIVATED\n⏰ Activated: ${time}`, 'success');
+                showStatus(`✅ SYSTEM ALREADY ACTIVATED\n⏰ Activated: ${time}\n🌐 Firebase: READY`, 'success');
                 showDebugInfo(`Already activated: ${licenseKey}`);
             }
         }
