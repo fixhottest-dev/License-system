@@ -1,33 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Activation Required</title>
+    <title>Activation</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
         body {
             background: #0a0a0a;
-            font-family: Arial, sans-serif;
-            color: #ffffff;
+            font-family: 'Courier New', monospace;
+            color: #00ff00;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
-            background-image: 
-                radial-gradient(circle at 20% 80%, rgba(255, 0, 0, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 0, 0, 0.1) 0%, transparent 50%);
+            padding: 15px;
+            overflow: hidden;
         }
         .container {
             width: 100%;
-            max-width: 400px;
-            background: #111111;
+            max-width: 280px;
+            background: #000000;
             border: 2px solid #ff0000;
             border-radius: 10px;
-            padding: 30px;
+            padding: 15px;
             box-shadow: 
-                0 0 30px rgba(255, 0, 0, 0.5),
-                inset 0 0 30px rgba(255, 0, 0, 0.1);
+                0 0 25px #ff0000,
+                inset 0 0 25px rgba(255, 0, 0, 0.1);
             text-align: center;
             position: relative;
         }
@@ -38,245 +41,484 @@
             left: -2px;
             right: -2px;
             bottom: -2px;
-            background: linear-gradient(45deg, #ff0000, #ff4444, #ff0000);
+            background: linear-gradient(45deg, #ff0000, #ff3333, #ff0000);
             border-radius: 12px;
             z-index: -1;
-            animation: borderGlow 3s ease-in-out infinite;
+            animation: borderGlow 2s ease-in-out infinite;
         }
         @keyframes borderGlow {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.7; }
         }
-        .logo { margin-bottom: 25px; }
+        .logo { 
+            margin-bottom: 15px; 
+        }
         .logo h1 { 
             color: #ff0000; 
-            font-size: 24px; 
-            margin-bottom: 8px;
+            font-size: 16px; 
+            margin-bottom: 5px;
             text-shadow: 0 0 10px #ff0000;
             animation: textFlicker 3s infinite;
         }
         @keyframes textFlicker {
-            0%, 100% { opacity: 1; text-shadow: 0 0 10px #ff0000; }
-            50% { opacity: 0.9; text-shadow: 0 0 15px #ff0000, 0 0 20px #ff0000; }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
         }
-        .logo p { color: #cccccc; font-size: 14px; }
-        .input-group { margin-bottom: 20px; text-align: left; }
-        .input-group label { 
-            display: block; 
-            color: #ff0000; 
-            margin-bottom: 8px; 
-            font-size: 14px;
-            text-shadow: 0 0 5px #ff0000;
+        .logo p { 
+            color: #00ff00; 
+            font-size: 10px; 
+            text-shadow: 0 0 5px #00ff00;
+        }
+        .input-container {
+            margin-bottom: 12px;
         }
         .license-input {
             width: 100%;
-            padding: 15px;
-            background: #1a1a1a;
-            border: 1px solid #333333;
+            padding: 10px 12px;
+            background: #111111;
+            border: 1px solid #ff0000;
             border-radius: 5px;
-            color: #ffffff;
-            font-size: 16px;
+            color: #00ff00;
+            font-size: 12px;
+            font-family: 'Courier New', monospace;
             text-align: center;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            outline: none;
+            -webkit-user-select: text;
+            user-select: text;
         }
         .license-input:focus { 
-            outline: none; 
-            border-color: #ff0000;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+            border-color: #00ff00;
+            box-shadow: 0 0 10px #00ff00;
         }
-        .activate-btn {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #ff0000, #cc0000);
+        .license-input::placeholder {
+            color: #666;
+        }
+        .buttons-vertical {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 12px 0;
+        }
+        .btn {
+            padding: 10px;
             border: none;
             border-radius: 5px;
-            color: #ffffff;
-            font-size: 16px;
+            font-size: 11px;
             font-weight: bold;
+            font-family: 'Courier New', monospace;
             cursor: pointer;
-            margin-top: 10px;
             transition: all 0.3s ease;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            min-height: 38px;
+            position: relative;
+            overflow: hidden;
         }
-        .activate-btn:hover { 
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        .btn:hover::before {
+            left: 100%;
+        }
+        .btn-paste {
+            background: linear-gradient(135deg, #0088ff, #0066cc);
+            color: #000000;
+            text-shadow: 0 0 5px #000;
+            box-shadow: 0 0 15px rgba(0, 136, 255, 0.5);
+            border: 1px solid #0088ff;
+        }
+        .btn-paste:hover {
+            background: linear-gradient(135deg, #3399ff, #0088ff);
+            box-shadow: 0 0 20px rgba(0, 136, 255, 0.7);
+            transform: translateY(-1px);
+        }
+        .btn-activate {
+            background: linear-gradient(135deg, #00ff00, #00cc00);
+            color: #000000;
+            text-shadow: 0 0 5px #000;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+            border: 1px solid #00ff00;
+        }
+        .btn-activate:hover {
+            background: linear-gradient(135deg, #33ff33, #00dd00);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.7);
+            transform: translateY(-1px);
+        }
+        .btn-telegram {
+            background: linear-gradient(135deg, #ff0000, #cc0000);
+            color: #000000;
+            text-shadow: 0 0 5px #000;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+            border: 1px solid #ff0000;
+        }
+        .btn-telegram:hover {
             background: linear-gradient(135deg, #ff3333, #dd0000);
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
-            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
+            transform: translateY(-1px);
         }
-        .activate-btn:active {
+        .btn:active {
             transform: translateY(0);
         }
         .status-message {
-            margin-top: 15px;
-            padding: 12px;
+            margin: 10px 0;
+            padding: 8px;
             border-radius: 5px;
-            font-size: 14px;
+            font-size: 10px;
+            font-weight: bold;
             display: none;
             animation: slideDown 0.3s ease;
+            text-align: center;
         }
         @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
+            from { opacity: 0; transform: translateY(-8px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .status-success { 
             background: rgba(0, 255, 0, 0.1); 
             border: 1px solid #00ff00; 
             color: #00ff00;
-            text-shadow: 0 0 10px #00ff00;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+            text-shadow: 0 0 5px #00ff00;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
         }
         .status-error { 
             background: rgba(255, 0, 0, 0.1); 
             border: 1px solid #ff0000; 
             color: #ff0000;
-            text-shadow: 0 0 10px #ff0000;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+            text-shadow: 0 0 5px #ff0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
         }
-        .contact-info {
-            margin-top: 20px;
-            padding-top: 15px;
-            border-top: 1px solid #333333;
-            font-size: 12px;
-            color: #666666;
-            line-height: 1.4;
+        .device-info {
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid #333;
+            font-size: 9px;
+            color: #666;
+            line-height: 1.3;
         }
-        
-        /* Hide any admin links and prevent navigation */
-        .admin-link { display: none !important; }
+
+        /* Matrix rain effect */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -2;
+            opacity: 0.1;
+        }
+
+        /* Landscape optimization */
+        @media (orientation: landscape) and (max-height: 500px) {
+            body {
+                padding: 10px;
+                align-items: flex-start;
+            }
+            .container {
+                max-width: 90%;
+                padding: 12px;
+                margin-top: 5px;
+            }
+            .logo h1 {
+                font-size: 14px;
+            }
+            .btn {
+                min-height: 35px;
+                padding: 8px;
+            }
+        }
+
+        /* Enable text operations */
+        .license-input {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
     </style>
 </head>
 <body>
+    <!-- Matrix Background -->
+    <canvas class="matrix-bg" id="matrixCanvas"></canvas>
+
     <div class="container">
         <div class="logo">
-            <h1>🔐 SYSTEM ACTIVATION</h1>
-            <p>Enter valid license key to continue</p>
+            <h1>⚡ SYSTEM ACTIVATION</h1>
+            <p>THE-F!X_King LICENSE SYSTEM</p>
         </div>
         
-        <div class="input-group">
-            <label>LICENSE KEY</label>
-            <input type="text" class="license-input" id="licenseKey" placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="19" autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false">
+        <div class="input-container">
+            <input type="text" class="license-input" id="licenseKey" 
+                   placeholder="THE-F!X_King:XXY" 
+                   maxlength="19" 
+                   autocomplete="on"
+                   autocorrect="off"
+                   autocapitalize="characters"
+                   spellcheck="false">
         </div>
         
-        <button class="activate-btn" onclick="activateApp()">
-            ⚡ ACTIVATE NOW
-        </button>
+        <div class="buttons-vertical">
+            <button class="btn btn-paste" onclick="pasteKey()">
+                📋 PASTE KEY
+            </button>
+            <button class="btn btn-activate" onclick="activateApp()">
+                ⚡ ACTIVATE
+            </button>
+            <button class="btn btn-telegram" onclick="getKey()">
+                🔑 GET KEY
+            </button>
+        </div>
         
         <div id="statusMessage" class="status-message"></div>
         
-        <div class="contact-info">
-            <p>📧 Contact: THE-F!X_King</p>
-            <p>Device ID: <span id="deviceId">Loading...</span></p>
-            <p style="color: #333; margin-top: 8px;">&copy; 2024 License System</p>
+        <div class="device-info">
+            <p>DEVICE: <span id="deviceId" style="color: #00ff00;">LOADING...</span></p>
+            <p style="margin-top: 5px;">CONTACT: THE-F!X_King</p>
         </div>
-        
-        <!-- NO ADMIN LINKS - COMPLETELY HIDDEN -->
     </div>
 
     <script>
-        // Prevent any navigation or admin access
-        window.addEventListener('beforeunload', function(e) {
-            e.preventDefault();
-            e.returnValue = '';
-        });
-
-        // Block right-click and developer tools
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
-
-        document.addEventListener('keydown', function(e) {
-            // Block F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
-            if (e.key === 'F12' || 
-                (e.ctrlKey && e.shiftKey && e.key === 'I') ||
-                (e.ctrlKey && e.shiftKey && e.key === 'J') ||
-                (e.ctrlKey && e.key === 'u')) {
-                e.preventDefault();
+        // === CONFIGURATION ===
+        // Using a hardcoded license list to avoid GitHub API issues
+        const VALID_LICENSES = [
+            {
+                key: "THE-F!X_KING:ABC",
+                status: "active",
+                expiryDate: "2025-12-31",
+                deviceLimit: 3,
+                usedDevices: 1
+            },
+            {
+                key: "THE-F!X_KING:XYZ",
+                status: "active",
+                expiryDate: "2025-12-31",
+                deviceLimit: 5,
+                usedDevices: 2
+            },
+            {
+                key: "THE-F!X_KING:123",
+                status: "active",
+                expiryDate: "2025-12-31",
+                deviceLimit: 2,
+                usedDevices: 0
             }
-        });
+        ];
 
-        // License key formatting
-        document.getElementById('licenseKey').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-            if(value.length > 16) value = value.substring(0, 16);
+        const TELEGRAM_URL = "https://t.me/THE-F!X_King";
+
+        // Matrix Rain Effect
+        function initMatrix() {
+            const canvas = document.getElementById('matrixCanvas');
+            const ctx = canvas.getContext('2d');
             
-            let formatted = '';
-            for(let i = 0; i < value.length; i++) {
-                if(i > 0 && i % 4 === 0) formatted += '-';
-                formatted += value[i];
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
             }
-            e.target.value = formatted;
+            
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            const chars = "THE-F!X_King0123456789";
+            const charArray = chars.split("");
+            const fontSize = 12;
+            const columns = canvas.width / fontSize;
+            const drops = [];
+            
+            for(let i = 0; i < columns; i++) {
+                drops[i] = Math.random() * canvas.height / fontSize;
+            }
+            
+            function drawMatrix() {
+                ctx.fillStyle = "rgba(0, 0, 0, 0.04)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = "#00ff00";
+                ctx.font = fontSize + "px 'Courier New'";
+                
+                for(let i = 0; i < drops.length; i++) {
+                    const text = charArray[Math.floor(Math.random() * charArray.length)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    
+                    if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+            
+            setInterval(drawMatrix, 35);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initMatrix();
+            document.getElementById('licenseKey').focus();
+        });
+
+        // License key formatting for THE-F!X_King:XXY format
+        document.getElementById('licenseKey').addEventListener('input', function(e) {
+            let value = e.target.value.toUpperCase();
+            
+            // Auto-format as user types
+            if (value.startsWith('THE-F!X_KING:')) {
+                if (value.length > 16) {
+                    value = value.substring(0, 16);
+                }
+            } else {
+                // If doesn't start with prefix, help user
+                if (value.length >= 3 && !value.startsWith('THE')) {
+                    value = 'THE-F!X_KING:' + value.replace(/[^A-Z0-9]/g, '');
+                    if (value.length > 16) value = value.substring(0, 16);
+                }
+            }
+            
+            e.target.value = value;
+            
+            // Auto-activate when complete key is entered
+            if (value.length === 16 && value.startsWith('THE-F!X_KING:')) {
+                setTimeout(() => activateApp(), 500);
+            }
         });
 
         // Enter key support
         document.getElementById('licenseKey').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') activateApp();
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                activateApp();
+            }
         });
 
         // Device ID
         function getDeviceId() {
             const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('device_id') || 'DEV-' + Math.random().toString(36).substr(2, 8).toUpperCase();
+            return urlParams.get('device_id') || 'DEV-' + Math.random().toString(36).substr(2, 6).toUpperCase();
         }
         document.getElementById('deviceId').textContent = getDeviceId();
 
+        // Get Key - Open Telegram
+        function getKey() {
+            showStatus('🔄 OPENING TELEGRAM...', 'error');
+            setTimeout(() => {
+                window.open(TELEGRAM_URL, '_blank');
+                showStatus('📱 TELEGRAM OPENED - GET YOUR KEY', 'success');
+            }, 500);
+        }
+
+        // Paste Key from clipboard
+        async function pasteKey() {
+            try {
+                const text = await navigator.clipboard.readText();
+                if (text) {
+                    let cleanText = text.toUpperCase().trim();
+                    
+                    // Ensure it has the correct format
+                    if (!cleanText.startsWith('THE-F!X_KING:')) {
+                        cleanText = 'THE-F!X_KING:' + cleanText.replace(/[^A-Z0-9]/g, '');
+                    }
+                    
+                    if (cleanText.length > 16) cleanText = cleanText.substring(0, 16);
+                    
+                    document.getElementById('licenseKey').value = cleanText;
+                    document.getElementById('licenseKey').focus();
+                    document.getElementById('licenseKey').select();
+                    
+                    showStatus('✅ KEY PASTED SUCCESSFULLY!', 'success');
+                    
+                    // Auto-activate if complete key
+                    if (cleanText.length === 16) {
+                        setTimeout(() => activateApp(), 800);
+                    }
+                } else {
+                    showStatus('❌ NO TEXT IN CLIPBOARD', 'error');
+                }
+            } catch (error) {
+                showStatus('📱 PRESS LONG ON INPUT → PASTE', 'error');
+                document.getElementById('licenseKey').focus();
+            }
+        }
+
+        // License Validation (using hardcoded list to avoid network issues)
+        async function validateLicense(licenseKey) {
+            try {
+                // Find the license (exact match with THE-F!X_King:XXY format)
+                const validLicense = VALID_LICENSES.find(license => 
+                    license.key === licenseKey && 
+                    license.status === 'active' &&
+                    new Date(license.expiryDate) >= new Date() &&
+                    license.usedDevices < license.deviceLimit
+                );
+                
+                if (validLicense) {
+                    return { 
+                        valid: true, 
+                        message: '✅ ACTIVATION SUCCESSFUL!',
+                        license: validLicense
+                    };
+                } else {
+                    const license = VALID_LICENSES.find(l => l.key === licenseKey);
+                    if (!license) {
+                        return { valid: false, message: '❌ INVALID LICENSE KEY' };
+                    } else if (license.status !== 'active') {
+                        return { valid: false, message: '❌ LICENSE REVOKED' };
+                    } else if (new Date(license.expiryDate) < new Date()) {
+                        return { valid: false, message: '❌ LICENSE EXPIRED' };
+                    } else if (license.usedDevices >= license.deviceLimit) {
+                        return { valid: false, message: '❌ DEVICE LIMIT REACHED' };
+                    } else {
+                        return { valid: false, message: '❌ LICENSE NOT VALID' };
+                    }
+                }
+            } catch (error) {
+                console.error('Validation error:', error);
+                return { valid: false, message: '❌ SYSTEM ERROR - TRY AGAIN' };
+            }
+        }
+
         // Activation function
         async function activateApp() {
-            const licenseKey = document.getElementById('licenseKey').value.replace(/-/g, '');
+            const licenseKey = document.getElementById('licenseKey').value.trim();
             const statusDiv = document.getElementById('statusMessage');
             
             statusDiv.style.display = 'none';
             
-            if (!licenseKey || licenseKey.length !== 16) {
-                showStatus('❌ INVALID LICENSE FORMAT', 'error');
+            // Validate format
+            if (!licenseKey.startsWith('THE-F!X_KING:') || licenseKey.length !== 16) {
+                showStatus('❌ FORMAT: THE-F!X_King:XXY', 'error');
                 return;
             }
 
-            showStatus('🔍 CHECKING LICENSE...', 'error');
+            showStatus('🔍 VERIFYING LICENSE...', 'error');
             
             try {
                 const response = await validateLicense(licenseKey);
                 
                 if (response.valid) {
-                    showStatus('✅ ACTIVATION SUCCESSFUL!', 'success');
-                    // Success - close activation and open app
+                    showStatus(response.message, 'success');
+                    
+                    // Success - close activation
                     setTimeout(() => {
-                        // This will be handled by the Android WebView
                         if (window.Android) {
                             window.Android.activationSuccess(licenseKey);
                         } else {
-                            // For WebView integration
                             window.location.href = 'app://activation_success?key=' + licenseKey;
                         }
                     }, 2000);
                 } else {
-                    showStatus('❌ ' + response.message, 'error');
+                    showStatus(response.message, 'error');
                 }
             } catch (error) {
-                showStatus('❌ NETWORK ERROR - TRY AGAIN', 'error');
+                showStatus('❌ SYSTEM ERROR - CONTACT ADMIN', 'error');
             }
-        }
-
-        // License validation (would connect to your server)
-        async function validateLicense(licenseKey) {
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    // Demo validation - replace with your actual license validation
-                    const validKeys = {
-                        'USER1ABCD1234EFGH': { valid: true, message: 'STANDARD LICENSE ACTIVATED' },
-                        'PREMIUMKEY9999999': { valid: true, message: 'PREMIUM LICENSE ACTIVATED' },
-                        'TESTKEY0000000000': { valid: true, message: 'TEST LICENSE ACTIVATED' }
-                    };
-                    
-                    if (validKeys[licenseKey]) {
-                        resolve({ valid: true, message: validKeys[licenseKey].message });
-                    } else {
-                        resolve({ valid: false, message: 'INVALID LICENSE KEY' });
-                    }
-                }, 1500);
-            });
         }
 
         function showStatus(message, type) {
@@ -286,11 +528,8 @@
             statusDiv.style.display = 'block';
         }
 
-        // Block any attempt to navigate away
-        window.history.pushState(null, null, window.location.href);
-        window.addEventListener('popstate', function() {
-            window.history.pushState(null, null, window.location.href);
-        });
+        // Mobile optimizations
+        document.addEventListener('touchstart', function() {}, {passive: true});
     </script>
 </body>
 </html>
