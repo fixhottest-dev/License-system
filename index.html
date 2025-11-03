@@ -83,6 +83,8 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             outline: none;
+            -webkit-user-select: text;
+            user-select: text;
         }
         .license-input:focus { 
             border-color: #00ff00;
@@ -128,6 +130,7 @@
         .btn-telegram {
             background: linear-gradient(135deg, #ff0000, #cc0000);
             color: #000000;
+            text-shadow: 0 0 5px #000;
             box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
             border: 1px solid #ff0000;
         }
@@ -139,6 +142,7 @@
         .btn-activate {
             background: linear-gradient(135deg, #00ff00, #00cc00);
             color: #000000;
+            text-shadow: 0 0 5px #000;
             box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
             border: 1px solid #00ff00;
         }
@@ -150,6 +154,7 @@
         .btn-paste {
             background: linear-gradient(135deg, #0088ff, #0066cc);
             color: #000000;
+            text-shadow: 0 0 5px #000;
             box-shadow: 0 0 15px rgba(0, 136, 255, 0.5);
             border: 1px solid #0088ff;
         }
@@ -179,12 +184,14 @@
             background: rgba(0, 255, 0, 0.1); 
             border: 1px solid #00ff00; 
             color: #00ff00;
+            text-shadow: 0 0 5px #00ff00;
             box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
         }
         .status-error { 
             background: rgba(255, 0, 0, 0.1); 
             border: 1px solid #ff0000; 
             color: #ff0000;
+            text-shadow: 0 0 5px #ff0000;
             box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
         }
         .device-info {
@@ -196,6 +203,7 @@
             line-height: 1.3;
         }
 
+        /* Matrix rain effect */
         .matrix-bg {
             position: fixed;
             top: 0;
@@ -207,6 +215,7 @@
             opacity: 0.1;
         }
 
+        /* Landscape optimization */
         @media (orientation: landscape) and (max-height: 500px) {
             body {
                 padding: 10px;
@@ -226,6 +235,7 @@
             }
         }
 
+        /* Enable text operations */
         .license-input {
             -webkit-user-select: text;
             -moz-user-select: text;
@@ -235,6 +245,7 @@
     </style>
 </head>
 <body>
+    <!-- Matrix Background -->
     <canvas class="matrix-bg" id="matrixCanvas"></canvas>
 
     <div class="container">
@@ -326,6 +337,7 @@
             initMatrix();
             document.getElementById('licenseKey').focus();
             generateDeviceId();
+            checkExistingActivation();
         });
 
         // Generate unique device ID
@@ -411,7 +423,7 @@
         }
 
         // License Validation
-        async function validateLicense(licenseKey) {
+        function validateLicense(licenseKey) {
             try {
                 // Get licenses from localStorage (shared with admin)
                 const licensesData = localStorage.getItem('THE-F!X_King_licenses');
@@ -424,7 +436,7 @@
                     license.key === licenseKey && 
                     license.status === 'active' &&
                     new Date(license.expiryDate) >= new Date() &&
-                    license.usedDevices < license.deviceLimit
+                    (license.activations ? license.activations.length : 0) < license.deviceLimit
                 );
                 
                 if (validLicense) {
@@ -445,7 +457,8 @@
                     return { 
                         valid: true, 
                         message: '✅ ACTIVATION SUCCESSFUL!',
-                        license: validLicense
+                        license: validLicense,
+                        isNewActivation: !isDeviceActivated
                     };
                 } else {
                     const license = licenses.find(l => l.key === licenseKey);
@@ -455,7 +468,7 @@
                         return { valid: false, message: '❌ LICENSE REVOKED' };
                     } else if (new Date(license.expiryDate) < new Date()) {
                         return { valid: false, message: '❌ LICENSE EXPIRED' };
-                    } else if (license.usedDevices >= license.deviceLimit) {
+                    } else if ((license.activations ? license.activations.length : 0) >= license.deviceLimit) {
                         return { valid: false, message: '❌ DEVICE LIMIT REACHED' };
                     } else {
                         return { valid: false, message: '❌ LICENSE NOT VALID' };
@@ -468,7 +481,7 @@
         }
 
         // Activation function
-        async function activateApp() {
+        function activateApp() {
             const licenseKey = document.getElementById('licenseKey').value.trim();
             const statusDiv = document.getElementById('statusMessage');
             
@@ -481,30 +494,40 @@
 
             showStatus('🔍 VERIFYING LICENSE...', 'error');
             
-            try {
-                const response = await validateLicense(licenseKey);
-                
-                if (response.valid) {
-                    showStatus(response.message, 'success');
+            setTimeout(() => {
+                try {
+                    const response = validateLicense(licenseKey);
                     
-                    // Store activation in localStorage
-                    localStorage.setItem('THE-F!X_King_activated', 'true');
-                    localStorage.setItem('THE-F!X_King_license', licenseKey);
-                    
-                    setTimeout(() => {
-                        if (window.Android) {
-                            window.Android.activationSuccess(licenseKey);
+                    if (response.valid) {
+                        let successMessage = response.message;
+                        if (response.isNewActivation) {
+                            successMessage += ' 🆕 Device registered';
                         } else {
-                            // For web demo
-                            showStatus('🎉 SYSTEM ACTIVATED SUCCESSFULLY!', 'success');
+                            successMessage += ' ✅ Already activated';
                         }
-                    }, 2000);
-                } else {
-                    showStatus(response.message, 'error');
+                        
+                        showStatus(successMessage, 'success');
+                        
+                        // Store activation in localStorage
+                        localStorage.setItem('THE-F!X_King_activated', 'true');
+                        localStorage.setItem('THE-F!X_King_license', licenseKey);
+                        localStorage.setItem('THE-F!X_King_activation_time', new Date().toISOString());
+                        
+                        setTimeout(() => {
+                            if (window.Android) {
+                                window.Android.activationSuccess(licenseKey);
+                            } else {
+                                // For web demo
+                                showStatus('🎉 SYSTEM ACTIVATED SUCCESSFULLY!', 'success');
+                            }
+                        }, 2000);
+                    } else {
+                        showStatus(response.message, 'error');
+                    }
+                } catch (error) {
+                    showStatus('❌ SYSTEM ERROR - CONTACT ADMIN', 'error');
                 }
-            } catch (error) {
-                showStatus('❌ SYSTEM ERROR - CONTACT ADMIN', 'error');
-            }
+            }, 1500);
         }
 
         function showStatus(message, type) {
@@ -518,18 +541,17 @@
         function checkExistingActivation() {
             const isActivated = localStorage.getItem('THE-F!X_King_activated');
             const licenseKey = localStorage.getItem('THE-F!X_King_license');
+            const activationTime = localStorage.getItem('THE-F!X_King_activation_time');
             
             if (isActivated && licenseKey) {
                 document.getElementById('licenseKey').value = licenseKey;
-                showStatus('✅ SYSTEM ALREADY ACTIVATED', 'success');
+                const time = activationTime ? new Date(activationTime).toLocaleString() : 'Unknown';
+                showStatus(`✅ SYSTEM ALREADY ACTIVATED\n⏰ Activated: ${time}`, 'success');
             }
         }
 
         // Mobile optimizations
         document.addEventListener('touchstart', function() {}, {passive: true});
-        
-        // Check activation on load
-        setTimeout(checkExistingActivation, 1000);
     </script>
 </body>
 </html>
