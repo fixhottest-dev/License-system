@@ -1,419 +1,313 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Activation</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>License Activation</title>
     <style>
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
+        :root {
+            --neon-red: #ff003c;
+            --neon-pink: #ff2a6d;
+            --dark-bg: #0c0c1d;
+            --darker-bg: #050510;
+            --panel-bg: rgba(15, 15, 35, 0.95);
+            --text-color: #e0e0ff;
         }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
         body {
-            background: #0a0a0a;
-            font-family: 'Courier New', monospace;
-            color: #00ff00;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 15px;
-            overflow: hidden;
-        }
-        .container {
-            width: 100%;
-            max-width: 320px;
-            background: #000000;
-            border: 2px solid #ff0000;
-            border-radius: 10px;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255, 0, 60, 0.15) 0%, transparent 25%),
+                radial-gradient(circle at 80% 70%, rgba(255, 42, 109, 0.15) 0%, transparent 25%),
+                linear-gradient(to bottom, var(--darker-bg), var(--dark-bg));
             padding: 20px;
-            box-shadow: 0 0 25px #ff0000;
-            text-align: center;
-            position: relative;
         }
-        .container::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, #ff0000, #ff3333, #ff0000);
-            border-radius: 12px;
-            z-index: -1;
-            animation: borderGlow 2s ease-in-out infinite;
-        }
-        @keyframes borderGlow {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        .logo { 
-            margin-bottom: 20px; 
-        }
-        .logo h1 { 
-            color: #ff0000; 
-            font-size: 18px; 
-            margin-bottom: 5px;
-            text-shadow: 0 0 10px #ff0000;
-            animation: textFlicker 3s infinite;
-        }
-        @keyframes textFlicker {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-        .logo p { 
-            color: #00ff00; 
-            font-size: 11px; 
-            text-shadow: 0 0 5px #00ff00;
-        }
-        .github-status {
-            padding: 8px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            font-size: 10px;
-            font-weight: bold;
-            text-align: center;
-        }
-        .status-connected {
-            background: rgba(0, 255, 0, 0.1);
-            border: 1px solid #00ff00;
-            color: #00ff00;
-        }
-        .status-disconnected {
-            background: rgba(255, 0, 0, 0.1);
-            border: 1px solid #ff0000;
-            color: #ff0000;
-        }
-        .input-container {
-            margin-bottom: 15px;
-        }
-        .license-input {
+        
+        .activation-container {
             width: 100%;
-            padding: 12px 15px;
-            background: #111111;
-            border: 1px solid #ff0000;
-            border-radius: 5px;
-            color: #00ff00;
-            font-size: 14px;
-            font-family: 'Courier New', monospace;
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            outline: none;
-        }
-        .license-input:focus { 
-            border-color: #00ff00;
-            box-shadow: 0 0 10px #00ff00;
-        }
-        .buttons-vertical {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin: 15px 0;
-        }
-        .btn {
-            padding: 14px;
-            border: none;
-            border-radius: 5px;
-            font-size: 13px;
-            font-weight: bold;
-            font-family: 'Courier New', monospace;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            min-height: 45px;
+            max-width: 350px;
+            background: var(--panel-bg);
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 0 25px rgba(255, 0, 60, 0.4);
+            border: 1px solid rgba(255, 0, 60, 0.5);
             position: relative;
             overflow: hidden;
         }
-        .btn::before {
+        
+        .activation-container::before {
             content: '';
             position: absolute;
             top: 0;
-            left: -100%;
+            left: 0;
             width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-red), transparent);
+            animation: scanline 2.5s linear infinite;
         }
-        .btn:hover::before {
-            left: 100%;
+        
+        @keyframes scanline {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
-        .btn-telegram {
-            background: linear-gradient(135deg, #ff0000, #cc0000);
-            color: #000000;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
-            border: 1px solid #ff0000;
+        
+        .title {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            text-shadow: 0 0 8px var(--neon-red);
+            color: #fff;
+            font-weight: 700;
+            letter-spacing: 1px;
         }
-        .btn-activate {
-            background: linear-gradient(135deg, #00ff00, #00cc00);
-            color: #000000;
-            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
-            border: 1px solid #00ff00;
+        
+        .subtitle {
+            text-align: center;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            color: #a0a0c0;
         }
+        
+        .key-input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(10, 10, 25, 0.8);
+            border: 1px solid rgba(255, 0, 60, 0.5);
+            border-radius: 5px;
+            color: var(--text-color);
+            font-size: 1rem;
+            margin-bottom: 15px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+        
+        .key-input:focus {
+            outline: none;
+            border-color: var(--neon-red);
+            box-shadow: 0 0 10px rgba(255, 0, 60, 0.6);
+        }
+        
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 12px;
+            background: transparent;
+            border: 1px solid;
+            border-radius: 5px;
+            color: var(--text-color);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
         .btn-paste {
-            background: linear-gradient(135deg, #0088ff, #0066cc);
-            color: #000000;
-            box-shadow: 0 0 15px rgba(0, 136, 255, 0.5);
-            border: 1px solid #0088ff;
+            background: rgba(255, 0, 60, 0.1);
+            border-color: var(--neon-red);
+            color: var(--neon-red);
         }
-        .status-message {
-            margin: 12px 0;
+        
+        .btn-paste:hover {
+            background: rgba(255, 0, 60, 0.2);
+            box-shadow: 0 0 12px rgba(255, 0, 60, 0.5);
+        }
+        
+        .btn-activate {
+            background: rgba(0, 255, 100, 0.1);
+            border-color: #00ff64;
+            color: #00ff64;
+        }
+        
+        .btn-activate:hover {
+            background: rgba(0, 255, 100, 0.2);
+            box-shadow: 0 0 12px rgba(0, 255, 100, 0.5);
+        }
+        
+        .btn-telegram {
+            background: rgba(0, 136, 204, 0.1);
+            border-color: #0088cc;
+            color: #0088cc;
+        }
+        
+        .btn-telegram:hover {
+            background: rgba(0, 136, 204, 0.2);
+            box-shadow: 0 0 12px rgba(0, 136, 204, 0.5);
+        }
+        
+        .status {
+            margin-top: 15px;
             padding: 10px;
             border-radius: 5px;
-            font-size: 11px;
-            font-weight: bold;
-            display: none;
-            animation: slideDown 0.3s ease;
             text-align: center;
-            line-height: 1.4;
+            font-size: 0.9rem;
+            display: none;
         }
-        .status-success { 
-            background: rgba(0, 255, 0, 0.1); 
-            border: 1px solid #00ff00; 
-            color: #00ff00;
+        
+        .status-success {
+            background: rgba(0, 255, 100, 0.1);
+            border: 1px solid rgba(0, 255, 100, 0.4);
+            color: #00ff64;
+            display: block;
         }
-        .status-error { 
-            background: rgba(255, 0, 0, 0.1); 
-            border: 1px solid #ff0000; 
-            color: #ff0000;
+        
+        .status-error {
+            background: rgba(255, 0, 60, 0.1);
+            border: 1px solid rgba(255, 0, 60, 0.4);
+            color: var(--neon-red);
+            display: block;
         }
-        .device-info {
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 0, 60, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 6px rgba(255, 0, 60, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 0, 60, 0);
+            }
+        }
+        
+        .footer {
+            text-align: center;
             margin-top: 15px;
-            padding-top: 12px;
-            border-top: 1px solid #333;
-            font-size: 10px;
+            font-size: 0.7rem;
             color: #666;
-            line-height: 1.3;
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <div class="logo">
-            <h1>⚡ SYSTEM ACTIVATION</h1>
-            <p>THE-F!X_King GITHUB SYSTEM</p>
-        </div>
+    <div class="activation-container">
+        <h1 class="title">THE KING CHEATS</h1>
+        <p class="subtitle">Please Enter License Key</p>
         
-        <div id="githubStatus" class="github-status status-disconnected">
-            🌐 GITHUB ONLINE SYSTEM
-        </div>
+        <input type="text" class="key-input" id="licenseKey" placeholder="XXXX-XXXX-XXXX-XXXX">
         
-        <div class="input-container">
-            <input type="text" class="license-input" id="licenseKey" 
-                   placeholder="THE-F!X_KING:XXY" 
-                   maxlength="19" 
-                   autocomplete="on"
-                   autocorrect="off"
-                   autocapitalize="characters"
-                   spellcheck="false">
-        </div>
-        
-        <div class="buttons-vertical">
-            <button class="btn btn-paste" onclick="pasteKey()">
-                📋 PASTE KEY
+        <div class="btn-group">
+            <button class="btn btn-paste" id="pasteBtn">
+                <i class="fas fa-paste"></i> PASTE KEY
             </button>
-            <button class="btn btn-activate" onclick="activateApp()">
-                ⚡ ACTIVATE SYSTEM
+            <button class="btn btn-activate pulse" id="activateBtn">
+                <i class="fas fa-bolt"></i> ACTIVATE
             </button>
-            <button class="btn btn-telegram" onclick="getKey()">
-                🔑 GET LICENSE KEY
+            <button class="btn btn-telegram" id="telegramBtn">
+                <i class="fab fa-telegram"></i> GET KEY
             </button>
         </div>
         
-        <div id="statusMessage" class="status-message"></div>
+        <div class="status" id="status"></div>
         
-        <div class="device-info">
-            <p>DEVICE: <span id="deviceId" style="color: #00ff00;">LOADING...</span></p>
-            <p style="margin-top: 5px;">CONTACT: @THE-F!X_King</p>
+        <div class="footer">
+            CyberKey System &copy; 2023
         </div>
     </div>
 
     <script>
-        // GitHub Gist Configuration - UPDATE THIS WITH YOUR GIST ID
-        const GITHUB_GIST_ID = "352739b7c902e818bf50abbf92ba882e";
-        
-        // No token needed for reading - GitHub allows public Gist access
-        
-        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('licenseKey').focus();
-            generateDeviceId();
-            checkExistingActivation();
-            updateGithubStatus();
-        });
-
-        function updateGithubStatus() {
-            const statusDiv = document.getElementById('githubStatus');
-            statusDiv.className = 'github-status status-connected';
-            statusDiv.innerHTML = '✅ GITHUB ONLINE SYSTEM';
-        }
-
-        function generateDeviceId() {
-            let deviceId = localStorage.getItem('THE-F!X_King_deviceId');
-            if (!deviceId) {
-                deviceId = 'DEV-' + Math.random().toString(36).substr(2, 8).toUpperCase();
-                localStorage.setItem('THE-F!X_King_deviceId', deviceId);
-            }
-            document.getElementById('deviceId').textContent = deviceId;
-            return deviceId;
-        }
-
-        // License key formatting
-        document.getElementById('licenseKey').addEventListener('input', function(e) {
-            let value = e.target.value.toUpperCase();
+            const pasteBtn = document.getElementById('pasteBtn');
+            const activateBtn = document.getElementById('activateBtn');
+            const telegramBtn = document.getElementById('telegramBtn');
+            const licenseKeyInput = document.getElementById('licenseKey');
+            const statusDiv = document.getElementById('status');
             
-            if (value.startsWith('THE-F!X_KING:')) {
-                if (value.length > 16) value = value.substring(0, 16);
-            } else {
-                if (value.length >= 3 && !value.startsWith('THE')) {
-                    value = 'THE-F!X_KING:' + value.replace(/[^A-Z0-9]/g, '');
-                    if (value.length > 16) value = value.substring(0, 16);
+            // Paste key functionality
+            pasteBtn.addEventListener('click', async function() {
+                try {
+                    const text = await navigator.clipboard.readText();
+                    licenseKeyInput.value = text;
+                    showStatus('Key pasted successfully!', 'success');
+                } catch (err) {
+                    showStatus('Failed to paste key. Please paste manually.', 'error');
                 }
-            }
-            e.target.value = value;
-        });
-
-        async function pasteKey() {
-            try {
-                const text = await navigator.clipboard.readText();
-                if (text) {
-                    let cleanText = text.toUpperCase().trim();
-                    if (!cleanText.startsWith('THE-F!X_KING:')) {
-                        cleanText = 'THE-F!X_KING:' + cleanText.replace(/[^A-Z0-9]/g, '');
-                    }
-                    if (cleanText.length > 16) cleanText = cleanText.substring(0, 16);
-                    document.getElementById('licenseKey').value = cleanText;
-                    showStatus('✅ KEY PASTED!', 'success');
-                }
-            } catch (error) {
-                showStatus('📱 PRESS LONG → PASTE', 'error');
-            }
-        }
-
-        // Get licenses from GitHub Gist
-        async function getLicensesFromGithub() {
-            try {
-                // Direct raw Gist URL - no authentication needed
-                const response = await fetch(`https://gist.githubusercontent.com/fixhottest-dev/352739b7c902e818bf50abbf92ba882e/raw/d345e089abfccb552c4311a0f824fb9ca5b23926/licenses.json`);
+            });
+            
+            // Activate license
+            activateBtn.addEventListener('click', function() {
+                const licenseKey = licenseKeyInput.value.trim();
                 
-                if (!response.ok) {
-                    throw new Error('Gist not found');
+                if (!licenseKey) {
+                    showStatus('Please enter a license key.', 'error');
+                    return;
                 }
                 
-                const data = await response.json();
-                return data.licenses || [];
-            } catch (error) {
-                console.error('GitHub error:', error);
-                return [];
-            }
-        }
-
-        // License Validation
-        async function validateLicense(licenseKey) {
-            try {
-                const licenses = await getLicensesFromGithub();
-                const deviceId = generateDeviceId();
+                // Show loading state
+                activateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ACTIVATING...';
+                activateBtn.disabled = true;
                 
-                // Find the license
-                const validLicense = licenses.find(license => 
-                    license.key === licenseKey && 
-                    license.status === 'active' &&
-                    new Date(license.expiryDate) >= new Date() &&
-                    (license.activations ? license.activations.length : 0) < license.deviceLimit
-                );
-                
-                if (validLicense) {
-                    // Check if device is already activated
-                    const isDeviceActivated = validLicense.activations && 
-                                            validLicense.activations.includes(deviceId);
+                // Simulate API call to validate license
+                setTimeout(() => {
+                    const isValid = validateLicenseKey(licenseKey);
                     
-                    return { 
-                        valid: true, 
-                        message: '✅ ACTIVATION SUCCESSFUL!',
-                        license: validLicense,
-                        isNewActivation: !isDeviceActivated
-                    };
-                } else {
-                    const license = licenses.find(l => l.key === licenseKey);
-                    if (!license) {
-                        return { valid: false, message: '❌ INVALID LICENSE KEY' };
-                    } else if (license.status !== 'active') {
-                        return { valid: false, message: '❌ LICENSE REVOKED' };
-                    } else if (new Date(license.expiryDate) < new Date()) {
-                        return { valid: false, message: '❌ LICENSE EXPIRED' };
-                    } else if ((license.activations ? license.activations.length : 0) >= license.deviceLimit) {
-                        return { valid: false, message: '❌ DEVICE LIMIT REACHED' };
+                    if (isValid) {
+                        showStatus('License activated successfully!', 'success');
+                        activateBtn.innerHTML = '<i class="fas fa-check"></i> ACTIVATED';
+                        activateBtn.classList.remove('pulse');
+                        activateBtn.style.background = 'rgba(0, 255, 100, 0.2)';
                     } else {
-                        return { valid: false, message: '❌ LICENSE NOT VALID' };
+                        showStatus('Invalid license key. Please check and try again.', 'error');
+                        activateBtn.innerHTML = '<i class="fas fa-bolt"></i> ACTIVATE';
+                        activateBtn.disabled = false;
                     }
-                }
-            } catch (error) {
-                return { valid: false, message: '❌ NETWORK ERROR - TRY AGAIN' };
-            }
-        }
-
-        // Activation function
-        async function activateApp() {
-            const licenseKey = document.getElementById('licenseKey').value.trim();
+                }, 1500);
+            });
             
-            if (!licenseKey.startsWith('THE-F!X_KING:') || licenseKey.length !== 16) {
-                showStatus('❌ FORMAT: THE-F!X_KING:XXY', 'error');
-                return;
-            }
-
-            showStatus('🔍 VERIFYING LICENSE...', 'error');
+            // Open Telegram
+            telegramBtn.addEventListener('click', function() {
+                // Replace with your actual Telegram handle
+                window.open('https://t.me/yourtelegramhandle', '_blank');
+            });
             
-            try {
-                const response = await validateLicense(licenseKey);
+            // Simple license validation
+            function validateLicenseKey(key) {
+                const pattern = /^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/i;
+                return pattern.test(key);
+            }
+            
+            // Show status message
+            function showStatus(message, type) {
+                statusDiv.textContent = message;
+                statusDiv.className = 'status';
                 
-                if (response.valid) {
-                    let successMessage = response.message;
-                    if (response.isNewActivation) {
-                        successMessage += '\n🆕 DEVICE REGISTERED';
-                    } else {
-                        successMessage += '\n✅ ALREADY ACTIVATED';
-                    }
-                    
-                    successMessage += `\n📱 Devices: ${response.license.activations.length}/${response.license.deviceLimit}`;
-                    successMessage += `\n📅 Expires: ${response.license.expiryDate}`;
-                    successMessage += `\n🌐 GitHub: ONLINE`;
-                    
-                    showStatus(successMessage, 'success');
-                    
-                    // Store activation
-                    localStorage.setItem('THE-F!X_King_activated', 'true');
-                    localStorage.setItem('THE-F!X_King_license', licenseKey);
-                    
-                } else {
-                    showStatus(response.message, 'error');
+                if (type === 'success') {
+                    statusDiv.classList.add('status-success');
+                } else if (type === 'error') {
+                    statusDiv.classList.add('status-error');
                 }
-            } catch (error) {
-                showStatus('❌ NETWORK ERROR', 'error');
+                
+                // Auto-hide after 4 seconds
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                }, 4000);
             }
-        }
-
-        function showStatus(message, type) {
-            const statusDiv = document.getElementById('statusMessage');
-            statusDiv.textContent = message;
-            statusDiv.className = `status-message status-${type}`;
-            statusDiv.style.display = 'block';
-        }
-
-        function checkExistingActivation() {
-            const isActivated = localStorage.getItem('THE-F!X_King_activated');
-            const licenseKey = localStorage.getItem('THE-F!X_King_license');
-            
-            if (isActivated && licenseKey) {
-                document.getElementById('licenseKey').value = licenseKey;
-                showStatus('✅ SYSTEM ALREADY ACTIVATED\n🌐 GitHub: ONLINE', 'success');
-            }
-        }
-
-        function getKey() {
-            showStatus('📱 CONTACT @THE-F!X_King', 'error');
-        }
+        });
     </script>
 </body>
 </html>
